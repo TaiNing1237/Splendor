@@ -92,6 +92,62 @@
       flex-direction: column;
       gap: 1.5rem;
       box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+      position: relative;
+    }
+
+    /* ── 伺服器開機中覆蓋層 ── */
+    #waking-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: var(--card-bg);
+      border-radius: 16px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.9rem;
+      z-index: 10;
+      padding: 2rem;
+      text-align: center;
+    }
+    #waking-overlay.show { display: flex; }
+
+    .waking-rocket {
+      font-size: 3rem;
+      animation: rocketBounce 1.4s ease-in-out infinite;
+    }
+    @keyframes rocketBounce {
+      0%, 100% { transform: translateY(0) rotate(-45deg); }
+      50%       { transform: translateY(-12px) rotate(-45deg); }
+    }
+
+    .waking-bars {
+      display: flex; align-items: flex-end; justify-content: center;
+      gap: 5px; height: 30px;
+    }
+    .waking-bars span {
+      display: block; width: 5px; border-radius: 3px;
+      background: var(--gold);
+      animation: aiBar 1.1s ease-in-out infinite;
+    }
+    .waking-bars span:nth-child(1) { animation-delay: 0s; }
+    .waking-bars span:nth-child(2) { animation-delay: 0.18s; }
+    .waking-bars span:nth-child(3) { animation-delay: 0.36s; }
+    .waking-bars span:nth-child(4) { animation-delay: 0.54s; }
+    .waking-bars span:nth-child(5) { animation-delay: 0.72s; }
+
+    .waking-title {
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--gold-bright);
+      margin: 0;
+    }
+    .waking-sub {
+      font-size: 0.82rem; color: var(--text-dim);
+      margin: 0; line-height: 1.5;
+    }
+    .waking-retry {
+      font-size: 0.78rem; color: var(--text-dim);
+      margin: 0; opacity: 0.7;
     }
 
     .form-group {
@@ -1569,6 +1625,18 @@
     <p class="game-subtitle">Splendor · 雙人對戰</p>
 
     <div class="start-card">
+
+      <!-- 伺服器開機中覆蓋層 -->
+      <div id="waking-overlay">
+        <div class="waking-rocket">🚀</div>
+        <div class="waking-bars">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <p class="waking-title">伺服器啟動中...</p>
+        <p class="waking-sub">免費方案首次開啟約需 30 秒<br>請稍候，系統正在自動重試</p>
+        <p class="waking-retry" id="waking-retry-text">正在連線...</p>
+      </div>
+
       <div class="form-group">
         <label>遊戲模式</label>
         <div class="radio-group">
@@ -2076,23 +2144,53 @@
     }
 
     // =============================================
-    // 新遊戲
+    // 新遊戲（含伺服器喚醒重試）
     // =============================================
+    let _wakingRetryTimer = null;
+
+    function _showWaking(attempt) {
+      const overlay = document.getElementById('waking-overlay');
+      overlay.classList.add('show');
+      document.getElementById('btn-start').disabled = true;
+      const retryText = document.getElementById('waking-retry-text');
+      if (attempt === 0) {
+        retryText.textContent = '正在連線...';
+      } else {
+        retryText.textContent = `第 ${attempt} 次重試中...`;
+      }
+    }
+
+    function _hideWaking() {
+      document.getElementById('waking-overlay').classList.remove('show');
+      document.getElementById('btn-start').disabled = false;
+      if (_wakingRetryTimer) { clearTimeout(_wakingRetryTimer); _wakingRetryTimer = null; }
+    }
+
     async function startGame() {
       mode = document.querySelector('input[name="mode"]:checked').value;
       difficulty = document.querySelector('input[name="difficulty"]:checked').value;
+      document.getElementById('btn-start').disabled = true;
+      await _tryStartGame(0);
+    }
+
+    async function _tryStartGame(attempt) {
+      if (attempt > 0) _showWaking(attempt);
 
       try {
         const res = await fetch(`${API}/new-game`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ mode, difficulty })
+          body: JSON.stringify({ mode, difficulty }),
+          signal: AbortSignal.timeout(8000),
         });
+        if (!res.ok) throw new Error('server error');
         const data = await res.json();
+
+        _hideWaking();
+
         gameId = data.game_id;
         state = data.state;
         myPlayerIdx = 0;
-        // 預填初始牌面，避免開場全部12張同時觸發翻牌動畫
         _prevBoardIds = new Set();
         _pendingCards = {};
         [1, 2, 3].forEach(lv => {
@@ -2105,7 +2203,6 @@
         gs.style.display = 'flex';
         gs.style.flexDirection = 'column';
 
-        // 更新頂部資訊
         document.getElementById('info-mode-chip').textContent =
           mode === 'pve' ? '人 vs AI' : '人 vs 人';
         const diffChip = document.getElementById('info-difficulty-chip');
@@ -2118,8 +2215,19 @@
 
         renderAll();
         connectWS(gameId);
+
       } catch (e) {
-        showMessage('無法連線到伺服器，請確認後端已啟動', 'error');
+        _showWaking(attempt + 1);
+        // 每 4 秒重試一次，最多重試 15 次（共約 60 秒）
+        if (attempt < 15) {
+          _wakingRetryTimer = setTimeout(() => _tryStartGame(attempt + 1), 4000);
+        } else {
+          document.getElementById('waking-retry-text').textContent =
+            '無法連線，請重新整理頁面再試';
+          document.getElementById('btn-start').disabled = false;
+          document.getElementById('waking-overlay').classList.remove('show');
+          showMessage('伺服器無回應，請稍後重試', 'error');
+        }
       }
     }
 
