@@ -1,2576 +1,3011 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>璀璨寶石 Splendor</title>
-<style>
-/* =============================================
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>璀璨寶石 Splendor</title>
+  <style>
+    /* =============================================
    全域 & 色系
    ============================================= */
-:root {
-  --bg:        #0a0a0f;
-  --card-bg:   #12121a;
-  --card-bg2:  #1a1a28;
-  --gold:      #c9a84c;
-  --gold-bright: #f0c040;
-  --text:      #e8e0d0;
-  --text-dim:  #8a8070;
-  --border:    #2a2a3a;
-  --highlight: #2a2050;
-  --red-err:   #c0392b;
-  --green-ok:  #2d8a4e;
+    :root {
+      --bg: #0a0a0f;
+      --card-bg: #12121a;
+      --card-bg2: #1a1a28;
+      --gold: #c9a84c;
+      --gold-bright: #f0c040;
+      --text: #e8e0d0;
+      --text-dim: #8a8070;
+      --border: #2a2a3a;
+      --highlight: #2a2050;
+      --red-err: #c0392b;
+      --green-ok: #2d8a4e;
 
-  /* 寶石顏色 */
-  --gem-white: #f0f0f0;
-  --gem-blue:  #1a6bbf;
-  --gem-green: #2d8a4e;
-  --gem-red:   #c0392b;
-  --gem-black: #2c2c2c;
-  --gem-gold:  #f0c040;
-}
+      /* 寶石顏色 */
+      --gem-white: #f0f0f0;
+      --gem-blue: #1a6bbf;
+      --gem-green: #2d8a4e;
+      --gem-red: #c0392b;
+      --gem-black: #2c2c2c;
+      --gem-gold: #f0c040;
+    }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-body {
-  font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+    body {
+      font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-/* =============================================
+    /* =============================================
    啟動畫面
    ============================================= */
-#start-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  gap: 2rem;
-  padding: 2rem;
-}
+    #start-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      gap: 2rem;
+      padding: 2rem;
+    }
 
-.game-title {
-  font-size: 3.5rem;
-  font-weight: 900;
-  background: linear-gradient(135deg, var(--gold), var(--gold-bright), var(--gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: 0.1em;
-  text-align: center;
-  text-shadow: none;
-  filter: drop-shadow(0 0 20px rgba(201,168,76,0.4));
-}
+    .game-title {
+      font-size: 3.5rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--gold), var(--gold-bright), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 0.1em;
+      text-align: center;
+      text-shadow: none;
+      filter: drop-shadow(0 0 20px rgba(201, 168, 76, 0.4));
+    }
 
-.game-subtitle {
-  color: var(--text-dim);
-  font-size: 1.1rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  text-align: center;
-}
+    .game-subtitle {
+      color: var(--text-dim);
+      font-size: 1.1rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      text-align: center;
+    }
 
-.start-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 2.5rem;
-  width: 100%;
-  max-width: 480px;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
-}
+    .start-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+    }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
 
-.form-group label {
-  color: var(--gold);
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
+    .form-group label {
+      color: var(--gold);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
 
-.radio-group {
-  display: flex;
-  gap: 0.8rem;
-}
+    .radio-group {
+      display: flex;
+      gap: 0.8rem;
+    }
 
-.radio-btn {
-  flex: 1;
-  cursor: pointer;
-}
+    .radio-btn {
+      flex: 1;
+      cursor: pointer;
+    }
 
-.radio-btn input { display: none; }
+    .radio-btn input {
+      display: none;
+    }
 
-.radio-btn span {
-  display: block;
-  text-align: center;
-  padding: 0.7rem 1rem;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  color: var(--text-dim);
-  font-size: 0.9rem;
-  transition: all 0.2s;
-}
+    .radio-btn span {
+      display: block;
+      text-align: center;
+      padding: 0.7rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
 
-.radio-btn input:checked + span {
-  border-color: var(--gold);
-  background: rgba(201,168,76,0.15);
-  color: var(--gold-bright);
-}
+    .radio-btn input:checked+span {
+      border-color: var(--gold);
+      background: rgba(201, 168, 76, 0.15);
+      color: var(--gold-bright);
+    }
 
-.radio-btn span:hover {
-  border-color: var(--gold);
-  color: var(--text);
-}
+    .radio-btn span:hover {
+      border-color: var(--gold);
+      color: var(--text);
+    }
 
-.btn-primary {
-  padding: 1rem;
-  background: linear-gradient(135deg, var(--gold), #b8901a);
-  color: #0a0a0f;
-  font-weight: 800;
-  font-size: 1.1rem;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  letter-spacing: 0.05em;
-  transition: all 0.2s;
-  box-shadow: 0 4px 20px rgba(201,168,76,0.3);
-}
+    .btn-primary {
+      padding: 1rem;
+      background: linear-gradient(135deg, var(--gold), #b8901a);
+      color: #0a0a0f;
+      font-weight: 800;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: all 0.2s;
+      box-shadow: 0 4px 20px rgba(201, 168, 76, 0.3);
+    }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 30px rgba(201,168,76,0.5);
-}
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px rgba(201, 168, 76, 0.5);
+    }
 
-.btn-primary:active { transform: translateY(0); }
+    .btn-primary:active {
+      transform: translateY(0);
+    }
 
-/* =============================================
+    /* =============================================
    主遊戲畫面
    ============================================= */
-#game-screen { display: none; min-height: 100vh; flex-direction: column; background: var(--bg); }
+    #game-screen {
+      display: none;
+      min-height: 100vh;
+      flex-direction: column;
+      background: var(--bg);
+    }
 
-/* 頂部資訊欄 */
-.top-bar {
-  background: var(--card-bg);
-  border-bottom: 1px solid var(--border);
-  padding: 0.75rem 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
+    /* 頂部資訊欄 */
+    .top-bar {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
 
-.top-bar-title {
-  font-size: 1.3rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, var(--gold), var(--gold-bright));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
+    .top-bar-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
 
-.top-info {
-  display: flex;
-  gap: 1.5rem;
-  align-items: center;
-  flex-wrap: wrap;
-}
+    .top-info {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
 
-.info-chip {
-  background: var(--card-bg2);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 0.3rem 0.9rem;
-  font-size: 0.85rem;
-  color: var(--text-dim);
-}
+    .info-chip {
+      background: var(--card-bg2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
 
-.info-chip span { color: var(--gold-bright); font-weight: 700; }
+    .info-chip span {
+      color: var(--gold-bright);
+      font-weight: 700;
+    }
 
-.current-player-badge {
-  background: rgba(201,168,76,0.2);
-  border: 1px solid var(--gold);
-  border-radius: 20px;
-  padding: 0.35rem 1rem;
-  color: var(--gold-bright);
-  font-weight: 700;
-  font-size: 0.9rem;
-  animation: pulse-gold 2s infinite;
-}
+    .current-player-badge {
+      background: rgba(201, 168, 76, 0.2);
+      border: 1px solid var(--gold);
+      border-radius: 20px;
+      padding: 0.35rem 1rem;
+      color: var(--gold-bright);
+      font-weight: 700;
+      font-size: 0.9rem;
+      animation: pulse-gold 2s infinite;
+    }
 
-@keyframes pulse-gold {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,76,0.3); }
-  50% { box-shadow: 0 0 0 6px rgba(201,168,76,0); }
-}
+    @keyframes pulse-gold {
 
-.btn-new-game {
-  padding: 0.4rem 1rem;
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text-dim);
-  cursor: pointer;
-  font-size: 0.85rem;
-  transition: all 0.2s;
-}
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.3);
+      }
 
-.btn-new-game:hover { border-color: var(--gold); color: var(--gold); }
+      50% {
+        box-shadow: 0 0 0 6px rgba(201, 168, 76, 0);
+      }
+    }
 
-/* 主內容區 */
-/* 遊戲主體容器（flex 直欄，含銀行+牌區+玩家） */
-.game-screen-inner {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  padding: 0.8rem 1rem;
-  max-width: 1600px;
-  margin: 0 auto;
-  width: 100%;
-}
+    .btn-new-game {
+      padding: 0.4rem 1rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
 
-/* 中間區：發展卡（左大欄）+ 貴族（右窄欄） */
-.game-main {
-  display: grid;
-  grid-template-columns: 1fr 185px;
-  gap: 0.8rem;
-}
+    .btn-new-game:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
 
-/* =============================================
+    /* 主內容區 */
+    /* 遊戲主體容器（flex 直欄，含銀行+牌區+玩家） */
+    .game-screen-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      padding: 0.8rem 1rem;
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* 中間區：發展卡（左大欄）+ 貴族（右窄欄） */
+    .game-main {
+      display: grid;
+      grid-template-columns: 1fr 185px;
+      gap: 0.8rem;
+    }
+
+    /* =============================================
    寶石銀行（左欄）
    ============================================= */
-.gem-bank {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 0.7rem 1.2rem;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 0.9rem;
-  align-items: center;
-}
+    .gem-bank {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.7rem 1.2rem;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      align-items: center;
+    }
 
-.gem-bank h3 {
-  color: var(--gold);
-  font-size: 0.8rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  margin-right: 0.4rem;
-  white-space: nowrap;
-}
+    .gem-bank h3 {
+      color: var(--gold);
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-right: 0.4rem;
+      white-space: nowrap;
+    }
 
-.gem-token {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  border: 3px solid transparent;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  font-weight: 800;
-  transition: all 0.18s;
-  position: relative;
-  user-select: none;
-  flex-shrink: 0;
-}
+    .gem-token {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 800;
+      transition: all 0.18s;
+      position: relative;
+      user-select: none;
+      flex-shrink: 0;
+    }
 
-.gem-token:hover { transform: scale(1.1); filter: brightness(1.2); }
-.gem-token.selected {
-  border-color: var(--gold-bright);
-  box-shadow: 0 0 14px rgba(240,192,64,0.7);
-  transform: scale(1.12);
-}
-.gem-token.disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
-.gem-token.zero { opacity: 0.25; cursor: not-allowed; pointer-events: none; }
+    .gem-token:hover {
+      transform: scale(1.1);
+      filter: brightness(1.2);
+    }
 
-/* ── 3D 立體寶石 token ── */
-.gem-token[data-gem="white"] {
-  background: radial-gradient(circle at 36% 32%, #fff 0%, #e8e8e8 45%, #b8b8b8 100%);
-  box-shadow:
-    inset 0 -4px 8px rgba(0,0,0,0.18),
-    inset 0  3px 7px rgba(255,255,255,0.9),
-    0 5px 12px rgba(0,0,0,0.45),
-    0 2px  4px rgba(0,0,0,0.3);
-  color: #333;
-}
-.gem-token[data-gem="blue"] {
-  background: radial-gradient(circle at 36% 32%, #5baaf0 0%, #1a6bbf 45%, #0d4a8a 100%);
-  box-shadow:
-    inset 0 -4px 8px rgba(0,0,0,0.3),
-    inset 0  3px 7px rgba(150,210,255,0.5),
-    0 5px 12px rgba(0,0,0,0.5),
-    0 2px  4px rgba(26,107,191,0.4);
-  color: #fff;
-}
-.gem-token[data-gem="green"] {
-  background: radial-gradient(circle at 36% 32%, #5ecb80 0%, #2d8a4e 45%, #1a5c32 100%);
-  box-shadow:
-    inset 0 -4px 8px rgba(0,0,0,0.3),
-    inset 0  3px 7px rgba(120,240,160,0.4),
-    0 5px 12px rgba(0,0,0,0.5),
-    0 2px  4px rgba(45,138,78,0.4);
-  color: #fff;
-}
-.gem-token[data-gem="red"] {
-  background: radial-gradient(circle at 36% 32%, #e85050 0%, #c0392b 45%, #8b1a14 100%);
-  box-shadow:
-    inset 0 -4px 8px rgba(0,0,0,0.3),
-    inset 0  3px 7px rgba(255,140,130,0.4),
-    0 5px 12px rgba(0,0,0,0.5),
-    0 2px  4px rgba(192,57,43,0.4);
-  color: #fff;
-}
-.gem-token[data-gem="black"] {
-  background: radial-gradient(circle at 36% 32%, #555 0%, #2c2c2c 45%, #111 100%);
-  border: 2px solid #666;
-  box-shadow:
-    inset 0 -4px 8px rgba(0,0,0,0.5),
-    inset 0  3px 6px rgba(180,180,180,0.12),
-    0 5px 12px rgba(0,0,0,0.7),
-    0 2px  4px rgba(0,0,0,0.5);
-  color: #ccc;
-}
-.gem-token[data-gem="gold"] {
-  background: radial-gradient(circle at 36% 32%, #ffe87a 0%, #f0c040 45%, #b8860b 100%);
-  box-shadow:
-    inset 0 -4px 8px rgba(0,0,0,0.2),
-    inset 0  3px 7px rgba(255,240,150,0.7),
-    0 5px 14px rgba(240,192,64,0.5),
-    0 2px  4px rgba(0,0,0,0.4);
-  color: #333;
-}
+    .gem-token.selected {
+      border-color: var(--gold-bright);
+      box-shadow: 0 0 14px rgba(240, 192, 64, 0.7);
+      transform: scale(1.12);
+    }
 
-.gem-count-badge {
-  position: absolute;
-  bottom: -6px;
-  right: -6px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  font-size: 0.72rem;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text);
-}
+    .gem-token.disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
 
-/* =============================================
+    .gem-token.zero {
+      opacity: 0.25;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* ── 3D 立體寶石 token ── */
+    .gem-token[data-gem="white"] {
+      background: radial-gradient(circle at 36% 32%, #fff 0%, #e8e8e8 45%, #b8b8b8 100%);
+      box-shadow:
+        inset 0 -4px 8px rgba(0, 0, 0, 0.18),
+        inset 0 3px 7px rgba(255, 255, 255, 0.9),
+        0 5px 12px rgba(0, 0, 0, 0.45),
+        0 2px 4px rgba(0, 0, 0, 0.3);
+      color: #333;
+    }
+
+    .gem-token[data-gem="blue"] {
+      background: radial-gradient(circle at 36% 32%, #5baaf0 0%, #1a6bbf 45%, #0d4a8a 100%);
+      box-shadow:
+        inset 0 -4px 8px rgba(0, 0, 0, 0.3),
+        inset 0 3px 7px rgba(150, 210, 255, 0.5),
+        0 5px 12px rgba(0, 0, 0, 0.5),
+        0 2px 4px rgba(26, 107, 191, 0.4);
+      color: #fff;
+    }
+
+    .gem-token[data-gem="green"] {
+      background: radial-gradient(circle at 36% 32%, #5ecb80 0%, #2d8a4e 45%, #1a5c32 100%);
+      box-shadow:
+        inset 0 -4px 8px rgba(0, 0, 0, 0.3),
+        inset 0 3px 7px rgba(120, 240, 160, 0.4),
+        0 5px 12px rgba(0, 0, 0, 0.5),
+        0 2px 4px rgba(45, 138, 78, 0.4);
+      color: #fff;
+    }
+
+    .gem-token[data-gem="red"] {
+      background: radial-gradient(circle at 36% 32%, #e85050 0%, #c0392b 45%, #8b1a14 100%);
+      box-shadow:
+        inset 0 -4px 8px rgba(0, 0, 0, 0.3),
+        inset 0 3px 7px rgba(255, 140, 130, 0.4),
+        0 5px 12px rgba(0, 0, 0, 0.5),
+        0 2px 4px rgba(192, 57, 43, 0.4);
+      color: #fff;
+    }
+
+    .gem-token[data-gem="black"] {
+      background: radial-gradient(circle at 36% 32%, #555 0%, #2c2c2c 45%, #111 100%);
+      border: 2px solid #666;
+      box-shadow:
+        inset 0 -4px 8px rgba(0, 0, 0, 0.5),
+        inset 0 3px 6px rgba(180, 180, 180, 0.12),
+        0 5px 12px rgba(0, 0, 0, 0.7),
+        0 2px 4px rgba(0, 0, 0, 0.5);
+      color: #ccc;
+    }
+
+    .gem-token[data-gem="gold"] {
+      background: radial-gradient(circle at 36% 32%, #ffe87a 0%, #f0c040 45%, #b8860b 100%);
+      box-shadow:
+        inset 0 -4px 8px rgba(0, 0, 0, 0.2),
+        inset 0 3px 7px rgba(255, 240, 150, 0.7),
+        0 5px 14px rgba(240, 192, 64, 0.5),
+        0 2px 4px rgba(0, 0, 0, 0.4);
+      color: #333;
+    }
+
+    .gem-count-badge {
+      position: absolute;
+      bottom: -6px;
+      right: -6px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+    }
+
+    /* =============================================
    發展卡區（中欄）
    ============================================= */
-.board-area {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-}
+    .board-area {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
 
-.card-row {
-  display: flex;
-  gap: 0.9rem;
-  align-items: center;
-}
+    .card-row {
+      display: flex;
+      gap: 0.9rem;
+      align-items: center;
+    }
 
-.deck-pile {
-  width: 123px;
-  min-width: 123px;
-  height: 174px;
-  background: var(--card-bg2);
-  border: 2px dashed var(--border);
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  gap: 0.4rem;
-}
+    .deck-pile {
+      width: 123px;
+      min-width: 123px;
+      height: 174px;
+      background: var(--card-bg2);
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      gap: 0.4rem;
+    }
 
-.deck-pile:hover { border-color: var(--gold); }
-.deck-pile .deck-label { font-size: 1rem; color: var(--text-dim); }
-.deck-pile .deck-count { font-size: 2rem; font-weight: 800; color: var(--gold); }
-.deck-pile .lv-badge {
-  font-size: 0.9rem;
-  background: var(--border);
-  border-radius: 4px;
-  padding: 1px 8px;
-  color: var(--text-dim);
-}
+    .deck-pile:hover {
+      border-color: var(--gold);
+    }
 
-/* 發展卡 */
-.dev-card {
-  width: 123px;
-  min-width: 123px;
-  height: 174px;
-  background: var(--card-bg2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.2s;
-  display: flex;
-  flex-direction: column;
-  padding: 9px;
-  overflow: hidden;
-  user-select: none;
-}
+    .deck-pile .deck-label {
+      font-size: 1rem;
+      color: var(--text-dim);
+    }
 
-.dev-card:hover {
-  border-color: var(--gold);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-}
+    .deck-pile .deck-count {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--gold);
+    }
 
-.dev-card.selected {
-  border-color: var(--gold-bright);
-  box-shadow: 0 0 16px rgba(240,192,64,0.6);
-  transform: translateY(-6px);
-}
+    .deck-pile .lv-badge {
+      font-size: 0.9rem;
+      background: var(--border);
+      border-radius: 4px;
+      padding: 1px 8px;
+      color: var(--text-dim);
+    }
 
-.dev-card.affordable {
-  border-color: var(--green-ok);
-  box-shadow: 0 0 8px rgba(45,138,78,0.4);
-}
+    /* 發展卡 */
+    .dev-card {
+      width: 123px;
+      min-width: 123px;
+      height: 174px;
+      background: var(--card-bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      padding: 9px;
+      overflow: hidden;
+      user-select: none;
+    }
 
-.dev-card.empty-slot {
-  background: rgba(255,255,255,0.03);
-  border: 1px dashed rgba(255,255,255,0.07);
-  cursor: default;
-  pointer-events: none;
-}
+    .dev-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    }
 
-/* 卡牌內容 */
-.card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
+    .dev-card.selected {
+      border-color: var(--gold-bright);
+      box-shadow: 0 0 16px rgba(240, 192, 64, 0.6);
+      transform: translateY(-6px);
+    }
 
-.card-points {
-  font-size: 1.8rem;
-  font-weight: 900;
-  color: var(--gold-bright);
-  line-height: 1;
-  min-width: 24px;
-}
+    .dev-card.affordable {
+      border-color: var(--green-ok);
+      box-shadow: 0 0 8px rgba(45, 138, 78, 0.4);
+    }
 
-.card-gem-color {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.15);
-  flex-shrink: 0;
-}
+    .dev-card.empty-slot {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px dashed rgba(255, 255, 255, 0.07);
+      cursor: default;
+      pointer-events: none;
+    }
 
-.card-body { flex: 1; }
+    /* 卡牌內容 */
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
 
-.card-costs {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  margin-top: auto;
-}
+    .card-points {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--gold-bright);
+      line-height: 1;
+      min-width: 24px;
+    }
 
-.cost-row {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 1rem;
-  font-weight: 700;
-}
+    .card-gem-color {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      flex-shrink: 0;
+    }
 
-.cost-dot {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
+    .card-body {
+      flex: 1;
+    }
 
-.cost-num { color: var(--text); min-width: 14px; }
+    .card-costs {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: auto;
+    }
 
-/* 購買動畫 */
-@keyframes buyFlash {
-  0% { box-shadow: 0 0 0 0 rgba(240,192,64,0.9); }
-  50% { box-shadow: 0 0 30px 15px rgba(240,192,64,0.5); }
-  100% { box-shadow: 0 0 0 0 rgba(240,192,64,0); }
-}
+    .cost-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 1rem;
+      font-weight: 700;
+    }
 
-.dev-card.buy-flash { animation: buyFlash 0.6s ease-out; }
+    .cost-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
 
-/* ── 翻牌動畫：新卡出現時（scaleX 模擬翻面，相容 overflow:hidden）── */
-@keyframes cardFlipIn {
-  0%   { transform: scaleX(0.04) translateY(6px); opacity: 0;   }
-  45%  { transform: scaleX(0.04) translateY(0);   opacity: 0.7; }
-  70%  { transform: scaleX(1.06) translateY(-3px);opacity: 1;   }
-  100% { transform: scaleX(1)    translateY(0);   opacity: 1;   }
-}
-.card-flip-in {
-  animation: cardFlipIn 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-  /* 暫時關掉 transition，避免與 animation 打架 */
-  transition: none !important;
-}
+    .cost-num {
+      color: var(--text);
+      min-width: 14px;
+    }
 
-/* ── 飛行寶石粒子（JS 動態建立） ── */
-.gem-fly-particle {
-  position: fixed;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transition: left 0.55s cubic-bezier(0.2, 0.8, 0.3, 1),
-              top  0.55s cubic-bezier(0.2, 0.8, 0.3, 1),
-              opacity 0.55s ease,
-              transform 0.55s ease;
-}
+    /* 購買動畫 */
+    @keyframes buyFlash {
+      0% {
+        box-shadow: 0 0 0 0 rgba(240, 192, 64, 0.9);
+      }
 
-/* 卡牌操作按鈕：hover 才顯示，不遮牌面 */
-.card-action-hint {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  font-size: 0.6rem;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.15s;
-}
+      50% {
+        box-shadow: 0 0 30px 15px rgba(240, 192, 64, 0.5);
+      }
 
-.dev-card:hover .card-action-hint {
-  opacity: 1;
-  pointer-events: auto;
-}
+      100% {
+        box-shadow: 0 0 0 0 rgba(240, 192, 64, 0);
+      }
+    }
 
-.card-action-hint .btn-buy,
-.card-action-hint .btn-reserve {
-  flex: 1;
-  padding: 2px 0;
-  text-align: center;
-  cursor: pointer;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  transition: background 0.15s;
-}
+    .dev-card.buy-flash {
+      animation: buyFlash 0.6s ease-out;
+    }
 
-.card-action-hint .btn-buy {
-  background: rgba(45,138,78,0.85);
-  border-radius: 0 0 0 9px;
-  color: #fff;
-}
+    /* ── 翻牌動畫：新卡出現時（scaleX 模擬翻面，相容 overflow:hidden）── */
+    @keyframes cardFlipIn {
+      0% {
+        transform: scaleX(0.04) translateY(6px);
+        opacity: 0;
+      }
 
-.card-action-hint .btn-buy:hover { background: rgba(45,138,78,1); }
+      45% {
+        transform: scaleX(0.04) translateY(0);
+        opacity: 0.7;
+      }
 
-.card-action-hint .btn-reserve {
-  background: rgba(201,168,76,0.85);
-  border-radius: 0 0 9px 0;
-  color: #0a0a0f;
-}
+      70% {
+        transform: scaleX(1.06) translateY(-3px);
+        opacity: 1;
+      }
 
-.card-action-hint .btn-reserve:hover { background: rgba(240,192,64,1); }
+      100% {
+        transform: scaleX(1) translateY(0);
+        opacity: 1;
+      }
+    }
 
-/* =============================================
+    .card-flip-in {
+      animation: cardFlipIn 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+      /* 暫時關掉 transition，避免與 animation 打架 */
+      transition: none !important;
+    }
+
+    /* ── 飛行寶石粒子（JS 動態建立） ── */
+    .gem-fly-particle {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: left 0.85s cubic-bezier(0.4, 0.0, 0.2, 1),
+        top 0.85s cubic-bezier(0.4, 0.0, 0.2, 1),
+        opacity 0.85s ease,
+        transform 0.85s ease;
+    }
+
+    /* ── 飛行卡片粒子（JS 動態建立） ── */
+    .card-fly-particle {
+      position: fixed;
+      border-radius: 12px;
+      pointer-events: none;
+      z-index: 9999;
+      background-size: cover;
+      transition: left 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+        top 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+        opacity 0.6s ease,
+        transform 0.6s ease;
+    }
+
+    /* 卡牌操作按鈕：hover 才顯示，不遮牌面 */
+    .card-action-hint {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      font-size: 0.6rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s;
+    }
+
+    .dev-card:hover .card-action-hint {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .card-action-hint .btn-buy,
+    .card-action-hint .btn-reserve {
+      flex: 1;
+      padding: 2px 0;
+      text-align: center;
+      cursor: pointer;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      transition: background 0.15s;
+    }
+
+    .card-action-hint .btn-buy {
+      background: rgba(45, 138, 78, 0.85);
+      border-radius: 0 0 0 9px;
+      color: #fff;
+    }
+
+    .card-action-hint .btn-buy:hover {
+      background: rgba(45, 138, 78, 1);
+    }
+
+    .card-action-hint .btn-reserve {
+      background: rgba(201, 168, 76, 0.85);
+      border-radius: 0 0 9px 0;
+      color: #0a0a0f;
+    }
+
+    .card-action-hint .btn-reserve:hover {
+      background: rgba(240, 192, 64, 1);
+    }
+
+    /* =============================================
    貴族牌區（右欄）
    ============================================= */
-.noble-area {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 0.8rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-  overflow-y: auto;
-  align-self: start;   /* 不跟著 board-area 拉高 */
-  position: sticky;
-  top: 0.8rem;         /* 隨頁面滾動時釘在頂部 */
-}
+    .noble-area {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      overflow-y: auto;
+      align-self: start;
+      /* 不跟著 board-area 拉高 */
+      position: sticky;
+      top: 0.8rem;
+      /* 隨頁面滾動時釘在頂部 */
+    }
 
-.noble-area h3 {
-  color: var(--gold);
-  font-size: 0.8rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-}
+    .noble-area h3 {
+      color: var(--gold);
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
 
-.noble-card {
-  background: var(--card-bg2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 0.6rem;
-  position: relative;
-  transition: all 0.3s;
-}
+    .noble-card {
+      background: var(--card-bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.6rem;
+      position: relative;
+      transition: all 0.3s;
+    }
 
-.noble-card.visited {
-  border-color: var(--gold);
-  animation: nobleVisit 0.8s ease-out;
-}
+    .noble-card.visited {
+      border-color: var(--gold);
+      animation: nobleVisit 0.8s ease-out;
+    }
 
-@keyframes nobleVisit {
-  0%   { box-shadow: 0 0 0 0 rgba(240,192,64,0.9); transform: scale(1); }
-  30%  { box-shadow: 0 0 25px 10px rgba(240,192,64,0.6); transform: scale(1.05); }
-  100% { box-shadow: 0 0 0 0 rgba(240,192,64,0); transform: scale(1); }
-}
+    @keyframes nobleVisit {
+      0% {
+        box-shadow: 0 0 0 0 rgba(240, 192, 64, 0.9);
+        transform: scale(1);
+      }
 
-.noble-points {
-  font-size: 1.1rem;
-  font-weight: 900;
-  color: var(--gold-bright);
-  text-align: center;
-  margin-bottom: 0.4rem;
-}
+      30% {
+        box-shadow: 0 0 25px 10px rgba(240, 192, 64, 0.6);
+        transform: scale(1.05);
+      }
 
-.noble-req {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3px;
-  justify-content: center;
-}
+      100% {
+        box-shadow: 0 0 0 0 rgba(240, 192, 64, 0);
+        transform: scale(1);
+      }
+    }
 
-.noble-req-item {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  font-size: 0.72rem;
-  font-weight: 700;
-}
+    .noble-points {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: var(--gold-bright);
+      text-align: center;
+      margin-bottom: 0.4rem;
+    }
 
-.noble-req-dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-}
+    .noble-req {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+      justify-content: center;
+    }
 
-/* =============================================
+    .noble-req-item {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .noble-req-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+
+    /* =============================================
    玩家面板（下方左右並排）
    ============================================= */
-.players-area {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.8rem;
-}
+    .players-area {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+    }
 
-.player-panel {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1rem;
-  transition: all 0.3s;
-}
+    .player-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      transition: all 0.3s;
+    }
 
-.player-panel.active-player {
-  border-color: var(--gold);
-  box-shadow: 0 0 20px rgba(201,168,76,0.2);
-}
+    .player-panel.active-player {
+      border-color: var(--gold);
+      box-shadow: 0 0 20px rgba(201, 168, 76, 0.2);
+    }
 
-.player-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.8rem;
-}
+    .player-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.8rem;
+    }
 
-.player-name {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--gold-bright);
-}
+    .player-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold-bright);
+    }
 
-.player-score {
-  font-size: 1.5rem;
-  font-weight: 900;
-  color: var(--gold-bright);
-}
+    .player-score {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--gold-bright);
+    }
 
-.player-score-label { font-size: 0.7rem; color: var(--text-dim); }
+    .player-score-label {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
 
-.player-section-label {
-  font-size: 0.72rem;
-  color: var(--text-dim);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 0.4rem;
-  margin-top: 0.6rem;
-}
+    .player-section-label {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+      margin-top: 0.6rem;
+    }
 
-/* 玩家寶石行 */
-.player-gems {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-}
+    /* 玩家寶石行 */
+    .player-gems {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
 
-.player-gem-item {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  font-size: 0.8rem;
-  font-weight: 700;
-}
+    .player-gem-item {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
 
-.player-gem-dot {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.1);
-}
+    .player-gem-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
 
-.player-gem-dot.gem-black { border-color: #555; }
+    .player-gem-dot.gem-black {
+      border-color: #555;
+    }
 
-/* 已購卡（顏色條）*/
-.player-cards-summary {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-}
+    /* 已購卡（顏色條）*/
+    .player-cards-summary {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
 
-.card-summary-item {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  background: var(--card-bg2);
-  border-radius: 6px;
-  padding: 2px 7px;
-}
+    .card-summary-item {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: var(--card-bg2);
+      border-radius: 6px;
+      padding: 2px 7px;
+    }
 
-/* 保留手牌 */
-.player-reserved {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-}
+    /* 保留手牌 */
+    .player-reserved {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
 
-.reserved-card {
-  width: 58px;
-  height: 82px;
-  background: var(--card-bg2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  cursor: pointer;
-  padding: 4px;
-  display: flex;
-  flex-direction: column;
-  font-size: 0.65rem;
-  position: relative;
-  transition: all 0.2s;
-  overflow: hidden;
-}
+    .reserved-card {
+      width: 58px;
+      height: 82px;
+      background: var(--card-bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      flex-direction: column;
+      font-size: 0.65rem;
+      position: relative;
+      transition: all 0.2s;
+      overflow: hidden;
+    }
 
-.reserved-card:hover {
-  border-color: var(--gold);
-  transform: translateY(-3px);
-}
+    .reserved-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-3px);
+    }
 
-.reserved-card.affordable { border-color: var(--green-ok); }
+    .reserved-card.affordable {
+      border-color: var(--green-ok);
+    }
 
-/* =============================================
+    /* =============================================
    動作面板 / 工具列
    ============================================= */
-.action-bar {
-  position: fixed;
-  bottom: 1.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(18,18,26,0.95);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 0.8rem 1.5rem;
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 8px 40px rgba(0,0,0,0.7);
-  z-index: 100;
-  min-width: 320px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
+    .action-bar {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(18, 18, 26, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.7);
+      z-index: 100;
+      min-width: 320px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
 
-.action-bar.hidden { display: none; }
+    .action-bar.hidden {
+      display: none;
+    }
 
-.action-info {
-  font-size: 0.85rem;
-  color: var(--text-dim);
-  text-align: center;
-}
+    .action-info {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      text-align: center;
+    }
 
-.action-info strong { color: var(--gold-bright); }
+    .action-info strong {
+      color: var(--gold-bright);
+    }
 
-.btn-action {
-  padding: 0.55rem 1.2rem;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--card-bg2);
-  color: var(--text);
-  cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 600;
-  transition: all 0.2s;
-}
+    .btn-action {
+      padding: 0.55rem 1.2rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--card-bg2);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
 
-.btn-action:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-action:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
 
-.btn-action.confirm {
-  background: linear-gradient(135deg, var(--green-ok), #1e6035);
-  border-color: var(--green-ok);
-  color: #fff;
-}
+    .btn-action.confirm {
+      background: linear-gradient(135deg, var(--green-ok), #1e6035);
+      border-color: var(--green-ok);
+      color: #fff;
+    }
 
-.btn-action.cancel {
-  background: rgba(192,57,43,0.2);
-  border-color: var(--red-err);
-  color: #e88;
-}
+    .btn-action.cancel {
+      background: rgba(192, 57, 43, 0.2);
+      border-color: var(--red-err);
+      color: #e88;
+    }
 
-/* =============================================
+    /* =============================================
    訊息提示
    ============================================= */
-#message-box {
-  position: fixed;
-  top: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 200;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  pointer-events: none;
-  min-width: 240px;
-  max-width: 420px;
-}
+    #message-box {
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      pointer-events: none;
+      min-width: 240px;
+      max-width: 420px;
+    }
 
-.msg-item {
-  padding: 0.7rem 1.2rem;
-  border-radius: 10px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-align: center;
-  animation: msgIn 0.3s ease-out;
-  pointer-events: auto;
-}
+    .msg-item {
+      padding: 0.7rem 1.2rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: center;
+      animation: msgIn 0.3s ease-out;
+      pointer-events: auto;
+    }
 
-.msg-item.error  { background: rgba(192,57,43,0.9); color: #fff; border: 1px solid #e55; }
-.msg-item.success{ background: rgba(45,138,78,0.9);  color: #fff; border: 1px solid #4a4; }
-.msg-item.info   { background: rgba(201,168,76,0.9); color: #0a0a0f; border: 1px solid var(--gold); }
+    .msg-item.error {
+      background: rgba(192, 57, 43, 0.9);
+      color: #fff;
+      border: 1px solid #e55;
+    }
 
-@keyframes msgIn {
-  from { opacity:0; transform: translateY(-10px); }
-  to   { opacity:1; transform: translateY(0); }
-}
+    .msg-item.success {
+      background: rgba(45, 138, 78, 0.9);
+      color: #fff;
+      border: 1px solid #4a4;
+    }
 
-/* =============================================
+    .msg-item.info {
+      background: rgba(201, 168, 76, 0.9);
+      color: #0a0a0f;
+      border: 1px solid var(--gold);
+    }
+
+    @keyframes msgIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* =============================================
    AI 思考動畫
    ============================================= */
-#ai-thinking {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(10,10,15,0.92);
-  border: 1px solid var(--gold);
-  border-radius: 16px;
-  padding: 2rem 3rem;
-  text-align: center;
-  z-index: 300;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 0 40px rgba(201,168,76,0.3);
-}
+    #ai-thinking {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(10, 10, 15, 0.92);
+      border: 1px solid var(--gold);
+      border-radius: 16px;
+      padding: 2rem 3rem;
+      text-align: center;
+      z-index: 300;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 40px rgba(201, 168, 76, 0.3);
+    }
 
-.ai-wave {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 5px;
-  height: 40px;
-  margin: 0 auto 1rem;
-}
+    .ai-wave {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 5px;
+      height: 40px;
+      margin: 0 auto 1rem;
+    }
 
-.ai-wave span {
-  display: block;
-  width: 6px;
-  border-radius: 3px;
-  background: var(--gold-bright);
-  animation: aiBar 1.1s ease-in-out infinite;
-  box-shadow: 0 0 8px rgba(201,168,76,0.6);
-}
-.ai-wave span:nth-child(1) { animation-delay: 0s;    }
-.ai-wave span:nth-child(2) { animation-delay: 0.15s; }
-.ai-wave span:nth-child(3) { animation-delay: 0.3s;  }
-.ai-wave span:nth-child(4) { animation-delay: 0.45s; }
-.ai-wave span:nth-child(5) { animation-delay: 0.6s;  }
+    .ai-wave span {
+      display: block;
+      width: 6px;
+      border-radius: 3px;
+      background: var(--gold-bright);
+      animation: aiBar 1.1s ease-in-out infinite;
+      box-shadow: 0 0 8px rgba(201, 168, 76, 0.6);
+    }
 
-@keyframes aiBar {
-  0%, 100% { height: 8px;  opacity: 0.4; }
-  50%       { height: 36px; opacity: 1;   }
-}
+    .ai-wave span:nth-child(1) {
+      animation-delay: 0s;
+    }
 
-#ai-thinking p {
-  color: var(--gold-bright);
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-}
+    .ai-wave span:nth-child(2) {
+      animation-delay: 0.15s;
+    }
 
-/* =============================================
+    .ai-wave span:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .ai-wave span:nth-child(4) {
+      animation-delay: 0.45s;
+    }
+
+    .ai-wave span:nth-child(5) {
+      animation-delay: 0.6s;
+    }
+
+    @keyframes aiBar {
+
+      0%,
+      100% {
+        height: 8px;
+        opacity: 0.4;
+      }
+
+      50% {
+        height: 36px;
+        opacity: 1;
+      }
+    }
+
+    #ai-thinking p {
+      color: var(--gold-bright);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    /* =============================================
    棄牌面板（超過10顆）
    ============================================= */
-/* ── 購買確認 modal ── */
-#buy-confirm-panel {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: var(--card-bg);
-  border: 1px solid var(--gold);
-  border-radius: 16px;
-  padding: 1.8rem 2rem;
-  z-index: 310;
-  backdrop-filter: blur(14px);
-  box-shadow: 0 0 40px rgba(0,0,0,0.85);
-  min-width: 300px;
-  max-width: 440px;
-}
+    /* ── 購買確認 modal ── */
+    #buy-confirm-panel {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--card-bg);
+      border: 1px solid var(--gold);
+      border-radius: 16px;
+      padding: 1.8rem 2rem;
+      z-index: 310;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.85);
+      min-width: 300px;
+      max-width: 440px;
+    }
 
-#buy-confirm-panel h3 {
-  color: var(--gold-bright);
-  margin-bottom: 1rem;
-  text-align: center;
-  font-size: 1.05rem;
-}
+    #buy-confirm-panel h3 {
+      color: var(--gold-bright);
+      margin-bottom: 1rem;
+      text-align: center;
+      font-size: 1.05rem;
+    }
 
-.buy-cost-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  justify-content: center;
-  margin: 0.8rem 0 1.2rem;
-}
+    .buy-cost-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin: 0.8rem 0 1.2rem;
+    }
 
-.buy-cost-chip {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--card-bg2);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 4px 12px;
-  font-size: 0.9rem;
-  font-weight: 700;
-}
+    .buy-cost-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--card-bg2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
 
-.buy-cost-chip.gold-chip {
-  border-color: var(--gold);
-  background: rgba(201,168,76,0.12);
-  color: var(--gold-bright);
-}
+    .buy-cost-chip.gold-chip {
+      border-color: var(--gold);
+      background: rgba(201, 168, 76, 0.12);
+      color: var(--gold-bright);
+    }
 
-.buy-cost-chip .chip-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-}
+    .buy-cost-chip .chip-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
 
-.buy-confirm-btns {
-  display: flex;
-  gap: 0.8rem;
-  justify-content: center;
-}
+    .buy-confirm-btns {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: center;
+    }
 
-#discard-panel {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: var(--card-bg);
-  border: 1px solid var(--gold);
-  border-radius: 16px;
-  padding: 2rem;
-  z-index: 300;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 0 40px rgba(0,0,0,0.8);
-  min-width: 320px;
-  max-width: 480px;
-}
+    #discard-panel {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--card-bg);
+      border: 1px solid var(--gold);
+      border-radius: 16px;
+      padding: 2rem;
+      z-index: 300;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+      min-width: 320px;
+      max-width: 480px;
+    }
 
-#discard-panel h3 {
-  color: var(--gold-bright);
-  margin-bottom: 1rem;
-  text-align: center;
-}
+    #discard-panel h3 {
+      color: var(--gold-bright);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
 
-.discard-gems {
-  display: flex;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: 1rem 0;
-}
+    .discard-gems {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 1rem 0;
+    }
 
-.discard-gem-btn {
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  border: 3px solid transparent;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 800;
-  transition: all 0.18s;
-  position: relative;
-}
+    .discard-gem-btn {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 800;
+      transition: all 0.18s;
+      position: relative;
+    }
 
-.discard-gem-btn:hover { transform: scale(1.1); }
-.discard-gem-btn.selected-discard { border-color: var(--red-err); }
+    .discard-gem-btn:hover {
+      transform: scale(1.1);
+    }
 
-.discard-actions { display: flex; gap: 0.8rem; justify-content: center; margin-top: 1rem; }
+    .discard-gem-btn.selected-discard {
+      border-color: var(--red-err);
+    }
 
-/* =============================================
+    .discard-actions {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    /* =============================================
    勝利畫面
    ============================================= */
-#win-screen {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(10,10,15,0.95);
-  z-index: 400;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 2rem;
-}
+    #win-screen {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 10, 15, 0.95);
+      z-index: 400;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 2rem;
+    }
 
-.confetti-bg {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
+    .confetti-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
 
-.confetti-particle {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  border-radius: 2px;
-  animation: confettiFall linear forwards;
-}
+    .confetti-particle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      animation: confettiFall linear forwards;
+    }
 
-@keyframes confettiFall {
-  0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-}
+    @keyframes confettiFall {
+      0% {
+        transform: translateY(-20px) rotate(0deg);
+        opacity: 1;
+      }
 
-.win-content {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-}
+      100% {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
 
-.win-trophy { font-size: 5rem; animation: trophyBounce 0.8s ease-out; }
+    .win-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
 
-@keyframes trophyBounce {
-  0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
-  60%  { transform: scale(1.2) rotate(5deg); opacity: 1; }
-  100% { transform: scale(1) rotate(0deg); }
-}
+    .win-trophy {
+      font-size: 5rem;
+      animation: trophyBounce 0.8s ease-out;
+    }
 
-.win-title {
-  font-size: 2.5rem;
-  font-weight: 900;
-  background: linear-gradient(135deg, var(--gold), var(--gold-bright), var(--gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: glow 2s ease-in-out infinite;
-}
+    @keyframes trophyBounce {
+      0% {
+        transform: scale(0) rotate(-20deg);
+        opacity: 0;
+      }
 
-@keyframes glow {
-  0%, 100% { filter: drop-shadow(0 0 10px rgba(240,192,64,0.5)); }
-  50%       { filter: drop-shadow(0 0 25px rgba(240,192,64,0.9)); }
-}
+      60% {
+        transform: scale(1.2) rotate(5deg);
+        opacity: 1;
+      }
 
-.win-scores {
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
-}
+      100% {
+        transform: scale(1) rotate(0deg);
+      }
+    }
 
-.win-score-item {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1rem 1.5rem;
-  text-align: center;
-}
+    .win-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--gold), var(--gold-bright), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: glow 2s ease-in-out infinite;
+    }
 
-.win-score-item.winner-item { border-color: var(--gold); }
-.win-score-item .name { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 0.3rem; }
-.win-score-item .score { font-size: 2rem; font-weight: 900; color: var(--gold-bright); }
+    @keyframes glow {
 
-/* =============================================
+      0%,
+      100% {
+        filter: drop-shadow(0 0 10px rgba(240, 192, 64, 0.5));
+      }
+
+      50% {
+        filter: drop-shadow(0 0 25px rgba(240, 192, 64, 0.9));
+      }
+    }
+
+    .win-scores {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+    }
+
+    .win-score-item {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      text-align: center;
+    }
+
+    .win-score-item.winner-item {
+      border-color: var(--gold);
+    }
+
+    .win-score-item .name {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .win-score-item .score {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--gold-bright);
+    }
+
+    /* =============================================
    歷史記錄面板
    ============================================= */
-#history-panel {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(10,10,15,0.9);
-  z-index: 350;
-  align-items: center;
-  justify-content: center;
-}
+    #history-panel {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 10, 15, 0.9);
+      z-index: 350;
+      align-items: center;
+      justify-content: center;
+    }
 
-.history-modal {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 2rem;
-  width: 90%;
-  max-width: 600px;
-  max-height: 80vh;
-  overflow-y: auto;
-}
+    .history-modal {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
 
-.history-modal h2 {
-  color: var(--gold);
-  margin-bottom: 1.5rem;
-  font-size: 1.3rem;
-}
+    .history-modal h2 {
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
+    }
 
-.history-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.85rem;
-}
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
 
-.history-table th {
-  color: var(--text-dim);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 0.5rem;
-  border-bottom: 1px solid var(--border);
-  text-align: left;
-}
+    .history-table th {
+      color: var(--text-dim);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
 
-.history-table td {
-  padding: 0.6rem 0.5rem;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-}
+    .history-table td {
+      padding: 0.6rem 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
 
-/* =============================================
+    /* =============================================
    工具類
    ============================================= */
-.gem-color-white { background: var(--gem-white); }
-.gem-color-blue  { background: var(--gem-blue); }
-.gem-color-green { background: var(--gem-green); }
-.gem-color-red   { background: var(--gem-red); }
-.gem-color-black { background: var(--gem-black); border: 1px solid #555; }
-.gem-color-gold  { background: var(--gem-gold); }
+    .gem-color-white {
+      background: var(--gem-white);
+    }
 
-.text-gold { color: var(--gold-bright); }
-.hidden { display: none !important; }
+    .gem-color-blue {
+      background: var(--gem-blue);
+    }
 
-/* =============================================
+    .gem-color-green {
+      background: var(--gem-green);
+    }
+
+    .gem-color-red {
+      background: var(--gem-red);
+    }
+
+    .gem-color-black {
+      background: var(--gem-black);
+      border: 1px solid #555;
+    }
+
+    .gem-color-gold {
+      background: var(--gem-gold);
+    }
+
+    .text-gold {
+      color: var(--gold-bright);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* =============================================
    RWD
    ============================================= */
-/* 1100px：cards 100px，noble 160px → 總最小 5×100+56+160+13+32 = 821px */
-@media (max-width: 1280px) {
-  .game-main { grid-template-columns: 1fr 160px; }
-  .dev-card  { width: 100px; min-width: 100px; height: 140px; }
-  .deck-pile { width: 100px; min-width: 100px; height: 140px; }
-}
+    /* 1100px：cards 100px，noble 160px → 總最小 5×100+56+160+13+32 = 821px */
+    @media (max-width: 1280px) {
+      .game-main {
+        grid-template-columns: 1fr 160px;
+      }
 
-/* 1000px：cards 86px，noble 148px → 5×86+56+148+13+32 = 679px */
-@media (max-width: 1100px) {
-  .game-main { grid-template-columns: 1fr 148px; }
-  .dev-card  { width: 86px; min-width: 86px; height: 122px; }
-  .deck-pile { width: 86px; min-width: 86px; height: 122px; }
-  .card-points { font-size: 1.3rem; }
-  .card-gem-color { width: 22px; height: 22px; }
-  .cost-row { font-size: 0.82rem; }
-  .cost-dot { width: 11px; height: 11px; }
-}
+      .dev-card {
+        width: 100px;
+        min-width: 100px;
+        height: 140px;
+      }
 
-/* 850px：cards 72px，noble 138px → 5×72+56+138+13+32 = 599px */
-@media (max-width: 950px) {
-  .game-main { grid-template-columns: 1fr 138px; }
-  .dev-card  { width: 72px; min-width: 72px; height: 104px; }
-  .deck-pile { width: 72px; min-width: 72px; height: 104px; }
-  .card-points { font-size: 1.1rem; }
-  .card-gem-color { width: 18px; height: 18px; }
-  .cost-row { font-size: 0.7rem; }
-  .cost-dot { width: 9px; height: 9px; }
-}
+      .deck-pile {
+        width: 100px;
+        min-width: 100px;
+        height: 140px;
+      }
+    }
 
-/* 極窄：改成單欄 */
-@media (max-width: 680px) {
-  .game-main     { grid-template-columns: 1fr; }
-  .players-area  { grid-template-columns: 1fr; }
-  .gem-bank      { flex-wrap: wrap; }
-}
-</style>
+    /* 1000px：cards 86px，noble 148px → 5×86+56+148+13+32 = 679px */
+    @media (max-width: 1100px) {
+      .game-main {
+        grid-template-columns: 1fr 148px;
+      }
+
+      .dev-card {
+        width: 86px;
+        min-width: 86px;
+        height: 122px;
+      }
+
+      .deck-pile {
+        width: 86px;
+        min-width: 86px;
+        height: 122px;
+      }
+
+      .card-points {
+        font-size: 1.3rem;
+      }
+
+      .card-gem-color {
+        width: 22px;
+        height: 22px;
+      }
+
+      .cost-row {
+        font-size: 0.82rem;
+      }
+
+      .cost-dot {
+        width: 11px;
+        height: 11px;
+      }
+    }
+
+    /* 850px：cards 72px，noble 138px → 5×72+56+138+13+32 = 599px */
+    @media (max-width: 950px) {
+      .game-main {
+        grid-template-columns: 1fr 138px;
+      }
+
+      .dev-card {
+        width: 72px;
+        min-width: 72px;
+        height: 104px;
+      }
+
+      .deck-pile {
+        width: 72px;
+        min-width: 72px;
+        height: 104px;
+      }
+
+      .card-points {
+        font-size: 1.1rem;
+      }
+
+      .card-gem-color {
+        width: 18px;
+        height: 18px;
+      }
+
+      .cost-row {
+        font-size: 0.7rem;
+      }
+
+      .cost-dot {
+        width: 9px;
+        height: 9px;
+      }
+    }
+
+    /* 極窄：改成單欄 */
+    @media (max-width: 680px) {
+      .game-main {
+        grid-template-columns: 1fr;
+      }
+
+      .players-area {
+        grid-template-columns: 1fr;
+      }
+
+      .gem-bank {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- =============================================
+  <!-- =============================================
      啟動畫面
      ============================================= -->
-<div id="start-screen">
-  <h1 class="game-title">璀璨寶石</h1>
-  <p class="game-subtitle">Splendor · 雙人對戰</p>
+  <div id="start-screen">
+    <h1 class="game-title">璀璨寶石</h1>
+    <p class="game-subtitle">Splendor · 雙人對戰</p>
 
-  <div class="start-card">
-    <div class="form-group">
-      <label>遊戲模式</label>
-      <div class="radio-group">
-        <label class="radio-btn">
-          <input type="radio" name="mode" value="pve" checked>
-          <span>人 vs AI</span>
-        </label>
-        <label class="radio-btn">
-          <input type="radio" name="mode" value="pvp">
-          <span>人 vs 人</span>
-        </label>
+    <div class="start-card">
+      <div class="form-group">
+        <label>遊戲模式</label>
+        <div class="radio-group">
+          <label class="radio-btn">
+            <input type="radio" name="mode" value="pve" checked>
+            <span>人 vs AI</span>
+          </label>
+          <label class="radio-btn">
+            <input type="radio" name="mode" value="pvp">
+            <span>人 vs 人</span>
+          </label>
+        </div>
       </div>
-    </div>
 
-    <div class="form-group" id="difficulty-group">
-      <label>AI 難度</label>
-      <div class="radio-group">
-        <label class="radio-btn">
-          <input type="radio" name="difficulty" value="easy">
-          <span>簡單</span>
-        </label>
-        <label class="radio-btn">
-          <input type="radio" name="difficulty" value="medium" checked>
-          <span>中等</span>
-        </label>
-        <label class="radio-btn">
-          <input type="radio" name="difficulty" value="hard">
-          <span>困難</span>
-        </label>
+      <div class="form-group" id="difficulty-group">
+        <label>AI 難度</label>
+        <div class="radio-group">
+          <label class="radio-btn">
+            <input type="radio" name="difficulty" value="easy">
+            <span>簡單</span>
+          </label>
+          <label class="radio-btn">
+            <input type="radio" name="difficulty" value="medium" checked>
+            <span>中等</span>
+          </label>
+          <label class="radio-btn">
+            <input type="radio" name="difficulty" value="hard">
+            <span>困難</span>
+          </label>
+        </div>
       </div>
-    </div>
 
-    <button class="btn-primary" id="btn-start">開始遊戲</button>
-    <button class="btn-primary" id="btn-history" style="background:transparent;border:1px solid var(--border);color:var(--text-dim);font-size:0.9rem;padding:0.6rem;">
-      查看對局歷史
-    </button>
+      <button class="btn-primary" id="btn-start">開始遊戲</button>
+      <button class="btn-primary" id="btn-history"
+        style="background:transparent;border:1px solid var(--border);color:var(--text-dim);font-size:0.9rem;padding:0.6rem;">
+        查看對局歷史
+      </button>
+    </div>
   </div>
-</div>
 
-<!-- =============================================
+  <!-- =============================================
      主遊戲畫面
      ============================================= -->
-<div id="game-screen">
+  <div id="game-screen">
 
-  <!-- 頂部資訊欄 -->
-  <div class="top-bar">
-    <div class="top-bar-title">璀璨寶石</div>
-    <div class="top-info">
-      <div class="info-chip">第 <span id="info-turn">1</span> 輪</div>
-      <div class="current-player-badge" id="info-current-player">玩家一的回合</div>
-      <div class="info-chip" id="info-mode-chip">人 vs AI</div>
-      <div class="info-chip" id="info-difficulty-chip" style="display:none">難度：<span id="info-difficulty">中等</span></div>
-      <div class="info-chip" id="last-round-notice" style="display:none;color:var(--red-err)">⚠ 最後一輪</div>
-    </div>
-    <button class="btn-new-game" id="btn-new-game-top">新遊戲</button>
-  </div>
-
-  <!-- 遊戲主體（flex 直欄） -->
-  <div class="game-screen-inner">
-
-    <!-- 1. 寶石銀行（全寬橫排） -->
-    <div class="gem-bank">
-      <h3>寶石銀行</h3>
-      <div id="bank-gems"></div>
-    </div>
-
-    <!-- 2. 中間：發展卡（左）+ 貴族（右） -->
-    <div class="game-main">
-      <div class="board-area" id="board-area"></div>
-      <div class="noble-area">
-        <h3>貴族牌</h3>
-        <div id="nobles-area"></div>
+    <!-- 頂部資訊欄 -->
+    <div class="top-bar">
+      <div class="top-bar-title">璀璨寶石</div>
+      <div class="top-info">
+        <div class="info-chip">第 <span id="info-turn">1</span> 輪</div>
+        <div class="current-player-badge" id="info-current-player">玩家一的回合</div>
+        <div class="info-chip" id="info-mode-chip">人 vs AI</div>
+        <div class="info-chip" id="info-difficulty-chip" style="display:none">難度：<span id="info-difficulty">中等</span>
+        </div>
+        <div class="info-chip" id="last-round-notice" style="display:none;color:var(--red-err)">⚠ 最後一輪</div>
       </div>
+      <button class="btn-new-game" id="btn-new-game-top">新遊戲</button>
     </div>
 
-    <!-- 3. 玩家面板（左右並排） -->
-    <div class="players-area" id="players-area"></div>
+    <!-- 遊戲主體（flex 直欄） -->
+    <div class="game-screen-inner">
+
+      <!-- 1. 寶石銀行（全寬橫排） -->
+      <div class="gem-bank">
+        <h3>寶石銀行</h3>
+        <div id="bank-gems"></div>
+      </div>
+
+      <!-- 2. 中間：發展卡（左）+ 貴族（右） -->
+      <div class="game-main">
+        <div class="board-area" id="board-area"></div>
+        <div class="noble-area">
+          <h3>貴族牌</h3>
+          <div id="nobles-area"></div>
+        </div>
+      </div>
+
+      <!-- 3. 玩家面板（左右並排） -->
+      <div class="players-area" id="players-area"></div>
+
+    </div>
 
   </div>
 
-</div>
-
-<!-- 動作提示列 -->
-<div class="action-bar hidden" id="action-bar">
-  <div class="action-info" id="action-info-text"></div>
-  <button class="btn-action confirm hidden" id="btn-confirm-action">確認</button>
-  <button class="btn-action cancel" id="btn-cancel-action">取消</button>
-</div>
-
-<!-- 訊息提示 -->
-<div id="message-box"></div>
-
-<!-- AI 思考動畫 -->
-<div id="ai-thinking">
-  <div class="ai-wave">
-    <span></span><span></span><span></span><span></span><span></span>
+  <!-- 動作提示列 -->
+  <div class="action-bar hidden" id="action-bar">
+    <div class="action-info" id="action-info-text"></div>
+    <button class="btn-action confirm hidden" id="btn-confirm-action">確認</button>
+    <button class="btn-action cancel" id="btn-cancel-action">取消</button>
   </div>
-  <p>AI 思考中</p>
-</div>
 
-<!-- 購買確認 modal -->
-<div id="buy-confirm-panel">
-  <h3 id="buy-confirm-title">確認購買</h3>
-  <div id="buy-confirm-card-info" style="text-align:center;color:var(--text-dim);font-size:0.85rem;margin-bottom:0.4rem;"></div>
-  <div class="buy-cost-list" id="buy-cost-list"></div>
-  <div id="buy-not-affordable" style="display:none;color:var(--red-err);text-align:center;font-size:0.85rem;margin-bottom:0.8rem;"></div>
-  <div class="buy-confirm-btns">
-    <button class="btn-action confirm" id="btn-confirm-buy">確認購買</button>
-    <button class="btn-action cancel"  id="btn-cancel-buy">取消</button>
+  <!-- 訊息提示 -->
+  <div id="message-box"></div>
+
+  <!-- AI 思考動畫 -->
+  <div id="ai-thinking">
+    <div class="ai-wave">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <p>AI 思考中</p>
   </div>
-</div>
 
-<!-- 棄牌面板 -->
-<div id="discard-panel">
-  <h3>寶石超過10顆，請選擇歸還</h3>
-  <p id="discard-info" style="color:var(--text-dim);text-align:center;font-size:0.85rem;margin-bottom:0.5rem;"></p>
-  <div class="discard-gems" id="discard-gems"></div>
-  <div class="discard-actions">
-    <button class="btn-action confirm" id="btn-confirm-discard">確認歸還</button>
+  <!-- 購買確認 modal -->
+  <div id="buy-confirm-panel">
+    <h3 id="buy-confirm-title">確認購買</h3>
+    <div id="buy-confirm-card-info"
+      style="text-align:center;color:var(--text-dim);font-size:0.85rem;margin-bottom:0.4rem;"></div>
+    <div class="buy-cost-list" id="buy-cost-list"></div>
+    <div id="buy-not-affordable"
+      style="display:none;color:var(--red-err);text-align:center;font-size:0.85rem;margin-bottom:0.8rem;"></div>
+    <div class="buy-confirm-btns">
+      <button class="btn-action confirm" id="btn-confirm-buy">確認購買</button>
+      <button class="btn-action cancel" id="btn-cancel-buy">取消</button>
+    </div>
   </div>
-</div>
 
-<!-- 勝利畫面 -->
-<div id="win-screen">
-  <div class="confetti-bg" id="confetti-bg"></div>
-  <div class="win-content">
-    <div class="win-trophy">🏆</div>
-    <div class="win-title" id="win-title"></div>
-    <div class="win-scores" id="win-scores"></div>
-    <button class="btn-primary" id="btn-play-again" style="margin-top:1rem;padding:0.8rem 2.5rem;">再玩一局</button>
+  <!-- 棄牌面板 -->
+  <div id="discard-panel">
+    <h3>寶石超過10顆，請選擇歸還</h3>
+    <p id="discard-info" style="color:var(--text-dim);text-align:center;font-size:0.85rem;margin-bottom:0.5rem;"></p>
+    <div class="discard-gems" id="discard-gems"></div>
+    <div class="discard-actions">
+      <button class="btn-action confirm" id="btn-confirm-discard">確認歸還</button>
+    </div>
   </div>
-</div>
 
-<!-- 歷史記錄面板 -->
-<div id="history-panel" style="display:none;">
-  <div class="history-modal">
-    <h2>對局歷史</h2>
-    <table class="history-table">
-      <thead>
-        <tr>
-          <th>模式</th>
-          <th>難度</th>
-          <th>勝者</th>
-          <th>分數</th>
-          <th>輪數</th>
-          <th>時間</th>
-        </tr>
-      </thead>
-      <tbody id="history-tbody"></tbody>
-    </table>
-    <button class="btn-action cancel" id="btn-close-history" style="margin-top:1.5rem;width:100%;text-align:center;">關閉</button>
+  <!-- 勝利畫面 -->
+  <div id="win-screen">
+    <div class="confetti-bg" id="confetti-bg"></div>
+    <div class="win-content">
+      <div class="win-trophy">🏆</div>
+      <div class="win-title" id="win-title"></div>
+      <div class="win-scores" id="win-scores"></div>
+      <button class="btn-primary" id="btn-play-again" style="margin-top:1rem;padding:0.8rem 2.5rem;">再玩一局</button>
+    </div>
   </div>
-</div>
 
-<script>
-// =============================================
-// 常數 & 工具
-// =============================================
-const API = 'http://localhost:8000';
-const GEM_COLORS = ['white','blue','green','red','black'];
-const GEM_ALL    = [...GEM_COLORS, 'gold'];
+  <!-- 歷史記錄面板 -->
+  <div id="history-panel" style="display:none;">
+    <div class="history-modal">
+      <h2>對局歷史</h2>
+      <table class="history-table">
+        <thead>
+          <tr>
+            <th>模式</th>
+            <th>難度</th>
+            <th>勝者</th>
+            <th>分數</th>
+            <th>輪數</th>
+            <th>時間</th>
+          </tr>
+        </thead>
+        <tbody id="history-tbody"></tbody>
+      </table>
+      <button class="btn-action cancel" id="btn-close-history"
+        style="margin-top:1.5rem;width:100%;text-align:center;">關閉</button>
+    </div>
+  </div>
 
-const GEM_NAMES = {
-  white:'白', blue:'藍', green:'綠', red:'紅', black:'黑', gold:'黃金'
-};
-const DIFF_NAMES = { easy:'簡單', medium:'中等', hard:'困難' };
+  <script>
+    // =============================================
+    // 常數 & 工具
+    // =============================================
+    const API = window.location.origin;
+    const GEM_COLORS = ['white', 'blue', 'green', 'red', 'black'];
+    const GEM_ALL = [...GEM_COLORS, 'gold'];
 
-function gemClass(color){ return `gem-color-${color}`; }
-function gemStyle(color){
-  const map = {
-    white:'#f0f0f0', blue:'#1a6bbf', green:'#2d8a4e',
-    red:'#c0392b', black:'#2c2c2c', gold:'#f0c040'
-  };
-  return `background:${map[color]||'#888'};`;
-}
-function gemTextColor(color){
-  return ['white','gold'].includes(color) ? '#333' : '#fff';
-}
+    const GEM_NAMES = {
+      white: '白', blue: '藍', green: '綠', red: '紅', black: '黑', gold: '黃金'
+    };
+    const DIFF_NAMES = { easy: '簡單', medium: '中等', hard: '困難' };
 
-// 寶石對應的 3D 漸層（用於飛行粒子）
-const GEM_GRADIENTS = {
-  white: 'radial-gradient(circle at 35% 32%, #fff 0%, #e0e0e0 50%, #b0b0b0 100%)',
-  blue:  'radial-gradient(circle at 35% 32%, #5baaf0 0%, #1a6bbf 50%, #0d4a8a 100%)',
-  green: 'radial-gradient(circle at 35% 32%, #5ecb80 0%, #2d8a4e 50%, #1a5c32 100%)',
-  red:   'radial-gradient(circle at 35% 32%, #e85050 0%, #c0392b 50%, #8b1a14 100%)',
-  black: 'radial-gradient(circle at 35% 32%, #555 0%, #2c2c2c 50%, #111 100%)',
-  gold:  'radial-gradient(circle at 35% 32%, #ffe87a 0%, #f0c040 50%, #b8860b 100%)',
-};
+    function gemClass(color) { return `gem-color-${color}`; }
+    function gemStyle(color) {
+      const map = {
+        white: '#f0f0f0', blue: '#1a6bbf', green: '#2d8a4e',
+        red: '#c0392b', black: '#2c2c2c', gold: '#f0c040'
+      };
+      return `background:${map[color] || '#888'};`;
+    }
+    function gemTextColor(color) {
+      return ['white', 'gold'].includes(color) ? '#333' : '#fff';
+    }
 
-// =============================================
-// 音效引擎（Web Audio API，不需外部檔案）
-// =============================================
-const AudioCtx = window.AudioContext || window.webkitAudioContext;
-let audioCtx = null;
+    // 寶石對應的 3D 漸層（用於飛行粒子）
+    const GEM_GRADIENTS = {
+      white: 'radial-gradient(circle at 35% 32%, #fff 0%, #e0e0e0 50%, #b0b0b0 100%)',
+      blue: 'radial-gradient(circle at 35% 32%, #5baaf0 0%, #1a6bbf 50%, #0d4a8a 100%)',
+      green: 'radial-gradient(circle at 35% 32%, #5ecb80 0%, #2d8a4e 50%, #1a5c32 100%)',
+      red: 'radial-gradient(circle at 35% 32%, #e85050 0%, #c0392b 50%, #8b1a14 100%)',
+      black: 'radial-gradient(circle at 35% 32%, #555 0%, #2c2c2c 50%, #111 100%)',
+      gold: 'radial-gradient(circle at 35% 32%, #ffe87a 0%, #f0c040 50%, #b8860b 100%)',
+    };
 
-function getAudioCtx() {
-  if (!audioCtx) audioCtx = new AudioCtx();
-  // Chrome 66+ starts AudioContext in "suspended" state;
-  // calling resume() after a user gesture unlocks it.
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-  return audioCtx;
-}
+    // =============================================
+    // 音效引擎（Web Audio API，不需外部檔案）
+    // =============================================
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
 
-/** 建立一個簡單的音符（正弦波）*/
-function playTone(freq, duration, gain = 0.25, type = 'sine', startDelay = 0) {
-  try {
-    const ctx = getAudioCtx();
-    const osc  = ctx.createOscillator();
-    const env  = ctx.createGain();
-    osc.connect(env);
-    env.connect(ctx.destination);
-    osc.type      = type;
-    osc.frequency.setValueAtTime(freq, ctx.currentTime + startDelay);
-    env.gain.setValueAtTime(0, ctx.currentTime + startDelay);
-    env.gain.linearRampToValueAtTime(gain, ctx.currentTime + startDelay + 0.01);
-    env.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + startDelay + duration);
-    osc.start(ctx.currentTime + startDelay);
-    osc.stop(ctx.currentTime  + startDelay + duration + 0.05);
-  } catch(e) {}
-}
+    function getAudioCtx() {
+      if (!audioCtx) audioCtx = new AudioCtx();
+      // Chrome 66+ starts AudioContext in "suspended" state;
+      // calling resume() after a user gesture unlocks it.
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    }
 
-/** 拿寶石：金屬撞擊清脆音（點選時） */
-function sfxPickGem() {
-  playTone(900,  0.08, 0.18, 'triangle');
-  playTone(1400, 0.06, 0.10, 'sine', 0.04);
-}
+    /** 建立一個簡單的音符（正弦波）*/
+    function playTone(freq, duration, gain = 0.25, type = 'sine', startDelay = 0) {
+      try {
+        const ctx = getAudioCtx();
+        const osc = ctx.createOscillator();
+        const env = ctx.createGain();
+        osc.connect(env);
+        env.connect(ctx.destination);
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + startDelay);
+        env.gain.setValueAtTime(0, ctx.currentTime + startDelay);
+        env.gain.linearRampToValueAtTime(gain, ctx.currentTime + startDelay + 0.01);
+        env.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + startDelay + duration);
+        osc.start(ctx.currentTime + startDelay);
+        osc.stop(ctx.currentTime + startDelay + duration + 0.05);
+      } catch (e) { }
+    }
 
-/** 確認拿寶石：弧線飛行 + 落地音（whoosh → thud） */
-function sfxGemCollect() {
-  try {
-    const ctx = getAudioCtx();
-    const t   = ctx.currentTime;
-    // ── whoosh：高頻掃到低頻，模擬寶石弧線飛行 ──
-    const osc = ctx.createOscillator();
-    const env = ctx.createGain();
-    osc.connect(env); env.connect(ctx.destination);
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(820, t);
-    osc.frequency.exponentialRampToValueAtTime(180, t + 0.28);
-    env.gain.setValueAtTime(0, t);
-    env.gain.linearRampToValueAtTime(0.16, t + 0.04);
-    env.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-    osc.start(t); osc.stop(t + 0.32);
-    // ── thud：低頻撞擊，模擬寶石落地 ──
-    playTone(140, 0.10, 0.22, 'triangle', 0.22);
-    playTone(75,  0.14, 0.18, 'sine',     0.22);
-  } catch(e) {}
-}
+    /** 拿寶石：金屬撞擊清脆音（點選時） */
+    function sfxPickGem() {
+      playTone(900, 0.08, 0.18, 'triangle');
+      playTone(1400, 0.06, 0.10, 'sine', 0.04);
+    }
 
-/** 保留卡牌：紙牌滑動聲（帶噪音） */
-function sfxReserveCard() {
-  try {
-    const ctx    = getAudioCtx();
-    const buf    = ctx.createBuffer(1, ctx.sampleRate * 0.15, ctx.sampleRate);
-    const data   = buf.getChannelData(0);
-    for(let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
-    const src    = ctx.createBufferSource();
-    const filter = ctx.createBiquadFilter();
-    const env    = ctx.createGain();
-    src.buffer   = buf;
-    filter.type  = 'bandpass';
-    filter.frequency.value = 3000;
-    filter.Q.value = 0.5;
-    src.connect(filter);
-    filter.connect(env);
-    env.connect(ctx.destination);
-    env.gain.setValueAtTime(0.12, ctx.currentTime);
-    env.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
-    src.start();
-  } catch(e) {}
-  playTone(440, 0.12, 0.06, 'sine', 0.05);
-}
+    /** 確認拿寶石：弧線飛行 + 落地音（whoosh → thud） */
+    function sfxGemCollect() {
+      try {
+        const ctx = getAudioCtx();
+        const t = ctx.currentTime;
+        // ── whoosh：高頻掃到低頻，模擬寶石弧線飛行 ──
+        const osc = ctx.createOscillator();
+        const env = ctx.createGain();
+        osc.connect(env); env.connect(ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(820, t);
+        osc.frequency.exponentialRampToValueAtTime(180, t + 0.28);
+        env.gain.setValueAtTime(0, t);
+        env.gain.linearRampToValueAtTime(0.16, t + 0.04);
+        env.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+        osc.start(t); osc.stop(t + 0.32);
+        // ── thud：低頻撞擊，模擬寶石落地 ──
+        playTone(140, 0.10, 0.22, 'triangle', 0.22);
+        playTone(75, 0.14, 0.18, 'sine', 0.22);
+      } catch (e) { }
+    }
 
-/** 購買卡牌：成功和弦 */
-function sfxBuyCard() {
-  playTone(523,  0.3,  0.18, 'sine');        // C5
-  playTone(659,  0.3,  0.14, 'sine', 0.06);  // E5
-  playTone(784,  0.35, 0.12, 'sine', 0.12);  // G5
-}
+    /** 保留卡牌：紙牌滑動聲（帶噪音） */
+    function sfxReserveCard() {
+      try {
+        const ctx = getAudioCtx();
+        const buf = ctx.createBuffer(1, ctx.sampleRate * 0.15, ctx.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+        const src = ctx.createBufferSource();
+        const filter = ctx.createBiquadFilter();
+        const env = ctx.createGain();
+        src.buffer = buf;
+        filter.type = 'bandpass';
+        filter.frequency.value = 3000;
+        filter.Q.value = 0.5;
+        src.connect(filter);
+        filter.connect(env);
+        env.connect(ctx.destination);
+        env.gain.setValueAtTime(0.12, ctx.currentTime);
+        env.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+        src.start();
+      } catch (e) { }
+      playTone(440, 0.12, 0.06, 'sine', 0.05);
+    }
 
-/** 貴族到訪：小型號角聲 */
-function sfxNoble() {
-  playTone(523,  0.15, 0.2, 'square');
-  playTone(659,  0.15, 0.2, 'square', 0.15);
-  playTone(784,  0.25, 0.2, 'square', 0.30);
-  playTone(1047, 0.4,  0.18,'sine',   0.45);
-}
+    /** 購買卡牌：成功和弦 */
+    function sfxBuyCard() {
+      playTone(523, 0.3, 0.18, 'sine');        // C5
+      playTone(659, 0.3, 0.14, 'sine', 0.06);  // E5
+      playTone(784, 0.35, 0.12, 'sine', 0.12);  // G5
+    }
 
-/** 錯誤聲 */
-function sfxError() {
-  playTone(200, 0.15, 0.15, 'sawtooth');
-  playTone(160, 0.2,  0.12, 'sawtooth', 0.1);
-}
+    /** 貴族到訪：小型號角聲 */
+    function sfxNoble() {
+      playTone(523, 0.15, 0.2, 'square');
+      playTone(659, 0.15, 0.2, 'square', 0.15);
+      playTone(784, 0.25, 0.2, 'square', 0.30);
+      playTone(1047, 0.4, 0.18, 'sine', 0.45);
+    }
 
-// =============================================
-// 寶石飛行動畫
-// =============================================
-/**
- * 從銀行 gem token 位置，飛向目前玩家面板
- * @param {string} color  - 寶石顏色
- * @param {number} count  - 數量（依序延遲飛出）
- * @param {number} playerIdx - 目標玩家 index
- */
-function animateGemFly(color, count, playerIdx) {
-  const bankEl = document.querySelector(`.gem-token[data-gem="${color}"]`);
-  const playerPanels = document.querySelectorAll('.player-panel');
-  const targetEl = playerPanels[playerIdx];
-  if (!bankEl || !targetEl) return;
+    /** 錯誤聲 */
+    function sfxError() {
+      playTone(200, 0.15, 0.15, 'sawtooth');
+      playTone(160, 0.2, 0.12, 'sawtooth', 0.1);
+    }
 
-  const srcRect = bankEl.getBoundingClientRect();
-  const tgtRect = targetEl.getBoundingClientRect();
+    // =============================================
+    // 寶石飛行動畫
+    // =============================================
+    /**
+     * 從銀行 gem token 位置，飛向目前玩家面板
+     * @param {string} color  - 寶石顏色
+     * @param {number} count  - 數量（依序延遲飛出）
+     * @param {number} playerIdx - 目標玩家 index
+     */
+    function animateGemFly(color, count, playerIdx) {
+      const bankEl = document.querySelector(`.gem-token[data-gem="${color}"]`);
+      const playerPanels = document.querySelectorAll('.player-panel');
+      const targetEl = playerPanels[playerIdx];
+      if (!bankEl || !targetEl) return;
 
-  const gradient  = GEM_GRADIENTS[color] || '#aaa';
-  const shadowClr = color === 'black' ? 'rgba(0,0,0,0.8)' : `rgba(0,0,0,0.45)`;
+      const srcRect = bankEl.getBoundingClientRect();
+      const tgtRect = targetEl.getBoundingClientRect();
 
-  for (let i = 0; i < count; i++) {
-    setTimeout(() => {
-      const size = 28;
-      const p    = document.createElement('div');
-      p.className = 'gem-fly-particle';
-      p.style.cssText = `
+      const gradient = GEM_GRADIENTS[color] || '#aaa';
+      const shadowClr = color === 'black' ? 'rgba(0,0,0,0.8)' : `rgba(0,0,0,0.45)`;
+
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          const size = 28;
+          const p = document.createElement('div');
+          p.className = 'gem-fly-particle';
+          p.style.cssText = `
         width: ${size}px;
         height: ${size}px;
         background: ${gradient};
         box-shadow: inset 0 2px 4px rgba(255,255,255,0.4),
                     0 4px 10px ${shadowClr};
-        left: ${srcRect.left + srcRect.width  / 2 - size / 2}px;
-        top:  ${srcRect.top  + srcRect.height / 2 - size / 2}px;
+        left: ${srcRect.left + srcRect.width / 2 - size / 2}px;
+        top:  ${srcRect.top + srcRect.height / 2 - size / 2}px;
         opacity: 1;
         transform: scale(1);
       `;
+          document.body.appendChild(p);
+
+          // 下一個 frame 才啟動 transition，確保起始位置已渲染
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            p.style.left = `${tgtRect.left + tgtRect.width / 2 - size / 2}px`;
+            p.style.top = `${tgtRect.top + tgtRect.height / 2 - size / 2}px`;
+            p.style.opacity = '0';
+            p.style.transform = 'scale(0.3)';
+          }));
+
+          setTimeout(() => p.remove(), 900);
+        }, i * 150);  // 每顆增加延遲讓多顆硬幣看得更清楚
+      }
+    }
+
+    // =============================================
+    // 卡牌飛行動畫
+    // =============================================
+    /**
+     * 讓卡片產生縮小飛往玩家面板的殘影動畫
+     * @param {string|number} cardId  - 目標卡片 ID (若無法用 ID 尋找則從牌堆飛出)
+     * @param {number} playerIdx - 目標玩家 index
+     * @param {number} level - 如果是從牌堆盲抽保留，傳入 level
+     */
+    function animateCardFly(cardId, playerIdx, level) {
+      let sourceEl = null;
+
+      if (cardId) {
+        sourceEl = document.querySelector(`.dev-card[data-card-id="${cardId}"]`);
+      }
+
+      if (!sourceEl && level) {
+        const piles = document.querySelectorAll('.deck-pile');
+        // level 3對應到第一個 pile，2對應第二個，1對應第三個
+        sourceEl = piles[3 - level];
+      }
+
+      const playerPanels = document.querySelectorAll('.player-panel');
+      const targetEl = playerPanels[playerIdx];
+
+      if (!sourceEl || !targetEl) return;
+
+      const srcRect = sourceEl.getBoundingClientRect();
+      const tgtRect = targetEl.getBoundingClientRect();
+
+      const p = document.createElement('div');
+      p.className = 'card-fly-particle';
+
+      // 複製原卡片外觀
+      p.style.cssText = `
+    width: ${srcRect.width}px;
+    height: ${srcRect.height}px;
+    background: var(--card-bg2);
+    border: 1px solid var(--gold);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    left: ${srcRect.left}px;
+    top: ${srcRect.top}px;
+    opacity: 1;
+    transform: scale(1);
+    display: flex;
+    flex-direction: column;
+    padding: 9px;
+  `;
+
+      // 將內部 HTML 複製過來 (如果是具體的卡)
+      if (sourceEl.classList.contains('dev-card') && !sourceEl.classList.contains('empty-slot')) {
+        p.innerHTML = sourceEl.innerHTML;
+        // 隱藏複製過來的操作按鈕
+        const hints = p.querySelectorAll('.card-action-hint');
+        hints.forEach(h => h.style.display = 'none');
+      } else if (level) {
+        p.innerHTML = `<div style="text-align:center; margin-top:40%; color:var(--text-dim);">等級${level}</div>`;
+      }
+
       document.body.appendChild(p);
 
-      // 下一個 frame 才啟動 transition，確保起始位置已渲染
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        p.style.left    = `${tgtRect.left + tgtRect.width  / 2 - size / 2}px`;
-        p.style.top     = `${tgtRect.top  + tgtRect.height / 2 - size / 2}px`;
-        p.style.opacity = '0';
-        p.style.transform = 'scale(0.3)';
-      }));
+      // 強制觸發重繪 (Reflow)，讓瀏覽器記錄起點位置的 CSS
+      void p.offsetWidth;
 
-      setTimeout(() => p.remove(), 700);
-    }, i * 80);  // 每顆延遲 80ms
-  }
-}
+      // 設定終點位置和狀態，觸發 transition 動畫
+      p.style.left = `${tgtRect.left + tgtRect.width / 2 - srcRect.width / 2}px`;
+      p.style.top = `${tgtRect.top + tgtRect.height / 2 - srcRect.height / 2}px`;
+      p.style.opacity = '0';
+      p.style.transform = 'scale(0.3)';
 
-// =============================================
-// 應用狀態
-// =============================================
-let state = null;          // 最新遊戲狀態（從後端）
-let gameId = null;
-let ws = null;
-let myPlayerIdx = 0;       // 本地玩家 index（PvP時可選；PvE預設0）
-let mode = 'pve';
-let difficulty = 'medium';
+      setTimeout(() => p.remove(), 600);
+    }
 
-// UI 互動狀態
-let selectedGems = {};     // 已選取的寶石 {color: count}
-let pendingAction = null;  // 等待確認的動作
-let discardState = {};     // 棄牌選取 {color: count}
-let discardPlayerId = null;
-let discardExcess = 0;
+    // =============================================
+    // 應用狀態
+    // =============================================
+    let state = null;          // 最新遊戲狀態（從後端）
+    let gameId = null;
+    let ws = null;
+    let myPlayerIdx = 0;       // 本地玩家 index（PvP時可選；PvE預設0）
+    let mode = 'pve';
+    let difficulty = 'medium';
 
-// =============================================
-// WebSocket
-// =============================================
-function connectWS(gid){
-  if(ws){ ws.close(); }
-  ws = new WebSocket(`ws://localhost:8000/ws/${gid}`);
-  ws.onmessage = (e) => {
-    const msg = JSON.parse(e.data);
-    handleWSMessage(msg);
-  };
-  ws.onerror = () => showMessage('WebSocket 連線錯誤', 'error');
-  ws.onclose = () => {};
-}
+    // UI 互動狀態
+    let selectedGems = {};     // 已選取的寶石 {color: count}
+    let pendingAction = null;  // 等待確認的動作
+    let discardState = {};     // 棄牌選取 {color: count}
+    let discardPlayerId = null;
+    let discardExcess = 0;
 
-function handleWSMessage(msg){
-  if(msg.type === 'state_update'){
-    // AI 動作音效（last_action 是 AI 的行動）
-    if(msg.last_action && msg.state && msg.state.current_player_idx === myPlayerIdx){
-      const a = msg.last_action;
-      if(a.type === 'buy')       sfxBuyCard();
-      else if(a.type === 'reserve') sfxReserveCard();
-      else if(a.type === 'take_gems') {
-        Object.entries(a.gems||{}).forEach(([c, n]) => animateGemFly(c, n, 1));
+    // =============================================
+    // WebSocket
+    // =============================================
+    function connectWS(gid) {
+      if (ws) { ws.close(); }
+      const wsProto = location.protocol === 'https:' ? 'wss' : 'ws';
+      ws = new WebSocket(`${wsProto}://${location.host}/ws/${gid}`);
+      ws.onmessage = (e) => {
+        const msg = JSON.parse(e.data);
+        handleWSMessage(msg);
+      };
+      ws.onerror = () => showMessage('WebSocket 連線錯誤', 'error');
+      ws.onclose = () => { };
+    }
+
+    function handleWSMessage(msg) {
+      if (msg.type === 'state_update') {
+        // AI 動作音效（last_action 是 AI 的行動）
+        if (msg.last_action && msg.state && msg.state.current_player_idx === myPlayerIdx) {
+          const a = msg.last_action;
+          if (a.type === 'buy') sfxBuyCard();
+          else if (a.type === 'reserve') sfxReserveCard();
+          else if (a.type === 'take_gems') {
+            Object.entries(a.gems || {}).forEach(([c, n]) => animateGemFly(c, n, 1));
+          }
+        }
+        // 若是首次收到 state（_prevBoardIds 仍為空），預填避免開場全翻
+        if (_prevBoardIds.size === 0 && msg.state) {
+          [1, 2, 3].forEach(lv => {
+            (msg.state.board[String(lv)] || []).forEach(c => { if (c) _prevBoardIds.add(c.id); });
+          });
+        }
+        state = msg.state;
+        renderAll();
+        if (msg.needs_discard && msg.discard_player !== null) {
+          if (msg.discard_player === myPlayerIdx || mode === 'pvp') {
+            openDiscardPanel(msg.discard_player, state);
+          }
+        }
+        if (msg.result && msg.result.game_over) {
+          setTimeout(() => showWinScreen(state), 600);
+        }
+        if (msg.result && msg.result.nobles_visited && msg.result.nobles_visited.length > 0) {
+          msg.result.nobles_visited.forEach(n => {
+            sfxNoble();
+            showMessage(`🎖 貴族到訪！獲得 ${n.points} 勝利點數`, 'info');
+          });
+        }
+      } else if (msg.type === 'ai_thinking') {
+        const el = document.getElementById('ai-thinking');
+        el.style.display = msg.thinking ? 'flex' : 'none';
+        el.style.flexDirection = 'column';
+        el.style.alignItems = 'center';
+      } else if (msg.type === 'error') {
+        sfxError();
+        showMessage(msg.message, 'error');
       }
     }
-    // 若是首次收到 state（_prevBoardIds 仍為空），預填避免開場全翻
-    if(_prevBoardIds.size === 0 && msg.state){
-      [1,2,3].forEach(lv => {
-        (msg.state.board[String(lv)] || []).forEach(c => { if(c) _prevBoardIds.add(c.id); });
-      });
-    }
-    state = msg.state;
-    renderAll();
-    if(msg.needs_discard && msg.discard_player !== null){
-      if(msg.discard_player === myPlayerIdx || mode === 'pvp'){
-        openDiscardPanel(msg.discard_player, state);
+
+    function sendWS(data) {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify(data));
       }
     }
-    if(msg.result && msg.result.game_over){
-      setTimeout(() => showWinScreen(state), 600);
-    }
-    if(msg.result && msg.result.nobles_visited && msg.result.nobles_visited.length > 0){
-      msg.result.nobles_visited.forEach(n => {
-        sfxNoble();
-        showMessage(`🎖 貴族到訪！獲得 ${n.points} 勝利點數`, 'info');
-      });
-    }
-  } else if(msg.type === 'ai_thinking'){
-    const el = document.getElementById('ai-thinking');
-    el.style.display        = msg.thinking ? 'flex' : 'none';
-    el.style.flexDirection  = 'column';
-    el.style.alignItems     = 'center';
-  } else if(msg.type === 'error'){
-    sfxError();
-    showMessage(msg.message, 'error');
-  }
-}
 
-function sendWS(data){
-  if(ws && ws.readyState === WebSocket.OPEN){
-    ws.send(JSON.stringify(data));
-  }
-}
+    // =============================================
+    // 新遊戲
+    // =============================================
+    async function startGame() {
+      mode = document.querySelector('input[name="mode"]:checked').value;
+      difficulty = document.querySelector('input[name="difficulty"]:checked').value;
 
-// =============================================
-// 新遊戲
-// =============================================
-async function startGame(){
-  mode = document.querySelector('input[name="mode"]:checked').value;
-  difficulty = document.querySelector('input[name="difficulty"]:checked').value;
+      try {
+        const res = await fetch(`${API}/new-game`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mode, difficulty })
+        });
+        const data = await res.json();
+        gameId = data.game_id;
+        state = data.state;
+        myPlayerIdx = 0;
+        // 預填初始牌面，避免開場全部12張同時觸發翻牌動畫
+        _prevBoardIds = new Set();
+        _pendingCards = {};
+        [1, 2, 3].forEach(lv => {
+          (state.board[String(lv)] || []).forEach(c => { if (c) _prevBoardIds.add(c.id); });
+        });
 
-  try {
-    const res = await fetch(`${API}/new-game`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ mode, difficulty })
-    });
-    const data = await res.json();
-    gameId = data.game_id;
-    state  = data.state;
-    myPlayerIdx = 0;
-    // 預填初始牌面，避免開場全部12張同時觸發翻牌動畫
-    _prevBoardIds = new Set();
-    [1,2,3].forEach(lv => {
-      (state.board[String(lv)] || []).forEach(c => { if(c) _prevBoardIds.add(c.id); });
-    });
+        resetUIState();
+        document.getElementById('start-screen').style.display = 'none';
+        const gs = document.getElementById('game-screen');
+        gs.style.display = 'flex';
+        gs.style.flexDirection = 'column';
 
-    resetUIState();
-    document.getElementById('start-screen').style.display = 'none';
-    const gs = document.getElementById('game-screen');
-    gs.style.display = 'flex';
-    gs.style.flexDirection = 'column';
+        // 更新頂部資訊
+        document.getElementById('info-mode-chip').textContent =
+          mode === 'pve' ? '人 vs AI' : '人 vs 人';
+        const diffChip = document.getElementById('info-difficulty-chip');
+        if (mode === 'pve') {
+          diffChip.style.display = '';
+          document.getElementById('info-difficulty').textContent = DIFF_NAMES[difficulty];
+        } else {
+          diffChip.style.display = 'none';
+        }
 
-    // 更新頂部資訊
-    document.getElementById('info-mode-chip').textContent =
-      mode === 'pve' ? '人 vs AI' : '人 vs 人';
-    const diffChip = document.getElementById('info-difficulty-chip');
-    if(mode === 'pve'){
-      diffChip.style.display = '';
-      document.getElementById('info-difficulty').textContent = DIFF_NAMES[difficulty];
-    } else {
-      diffChip.style.display = 'none';
+        renderAll();
+        connectWS(gameId);
+      } catch (e) {
+        showMessage('無法連線到伺服器，請確認後端已啟動', 'error');
+      }
     }
 
-    renderAll();
-    connectWS(gameId);
-  } catch(e){
-    showMessage('無法連線到伺服器，請確認後端已啟動', 'error');
-  }
-}
+    // =============================================
+    // 主渲染
+    // =============================================
+    function renderAll() {
+      if (!state) return;
+      renderTopBar();
+      renderBank();
+      renderBoard();
+      renderNobles();
+      renderPlayers();
+      updateActionBar();
+    }
 
-// =============================================
-// 主渲染
-// =============================================
-function renderAll(){
-  if(!state) return;
-  renderTopBar();
-  renderBank();
-  renderBoard();
-  renderNobles();
-  renderPlayers();
-  updateActionBar();
-}
+    // 頂部資訊
+    function renderTopBar() {
+      document.getElementById('info-turn').textContent = state.turn;
+      document.getElementById('info-current-player').textContent =
+        `${state.current_player_name} 的回合`;
 
-// 頂部資訊
-function renderTopBar(){
-  document.getElementById('info-turn').textContent = state.turn;
-  document.getElementById('info-current-player').textContent =
-    `${state.current_player_name} 的回合`;
+      const lrNotice = document.getElementById('last-round-notice');
+      lrNotice.style.display = state.last_round_trigger !== null ? '' : 'none';
+    }
 
-  const lrNotice = document.getElementById('last-round-notice');
-  lrNotice.style.display = state.last_round_trigger !== null ? '' : 'none';
-}
+    // =============================================
+    // 銀行寶石
+    // =============================================
+    function renderBank() {
+      const el = document.getElementById('bank-gems');
+      el.innerHTML = '';
+      el.style.display = 'flex';
+      el.style.flexDirection = 'row';
+      el.style.gap = '0.9rem';
+      el.style.alignItems = 'center';
+      el.style.flexWrap = 'wrap';
 
-// =============================================
-// 銀行寶石
-// =============================================
-function renderBank(){
-  const el = document.getElementById('bank-gems');
-  el.innerHTML = '';
-  el.style.display = 'flex';
-  el.style.flexDirection = 'row';
-  el.style.gap = '0.9rem';
-  el.style.alignItems = 'center';
-  el.style.flexWrap = 'wrap';
+      GEM_ALL.forEach(gem => {
+        const count = state.bank[gem] || 0;
+        const sel = selectedGems[gem] || 0;
+        const isGold = gem === 'gold';
+        const isZero = count <= sel;
 
-  GEM_ALL.forEach(gem => {
-    const count = state.bank[gem] || 0;
-    const sel   = selectedGems[gem] || 0;
-    const isGold = gem === 'gold';
-    const isZero = count <= sel;
+        const div = document.createElement('div');
+        div.className = 'gem-token' + (isZero ? ' zero' : '') + (sel > 0 ? ' selected' : '');
+        div.dataset.gem = gem;
+        div.style.cssText = gemStyle(gem);
+        div.style.color = gemTextColor(gem);
+        if (isGold) div.style.pointerEvents = 'none'; // 不能直接點黃金
 
-    const div = document.createElement('div');
-    div.className = 'gem-token' + (isZero ? ' zero' : '') + (sel > 0 ? ' selected' : '');
-    div.dataset.gem = gem;
-    div.style.cssText = gemStyle(gem);
-    div.style.color   = gemTextColor(gem);
-    if(isGold) div.style.pointerEvents = 'none'; // 不能直接點黃金
+        // 計數徽章
+        const badge = document.createElement('div');
+        badge.className = 'gem-count-badge';
+        badge.textContent = count;
+        div.appendChild(badge);
 
-    // 計數徽章
-    const badge = document.createElement('div');
-    badge.className = 'gem-count-badge';
-    badge.textContent = count;
-    div.appendChild(badge);
-
-    if(sel > 0){
-      const selBadge = document.createElement('div');
-      selBadge.style.cssText = `
+        if (sel > 0) {
+          const selBadge = document.createElement('div');
+          selBadge.style.cssText = `
         position:absolute;top:-6px;left:-6px;
         background:var(--gold-bright);color:#0a0a0f;
         border-radius:50%;width:18px;height:18px;
         font-size:0.65rem;font-weight:900;
         display:flex;align-items:center;justify-content:center;
       `;
-      selBadge.textContent = '+' + sel;
-      div.appendChild(selBadge);
-    }
-
-    if(!isGold && !isZero){
-      div.addEventListener('click', () => onGemClick(gem));
-    }
-
-    el.appendChild(div);
-  });
-}
-
-// 點擊寶石
-function onGemClick(gem){
-  if(!isMyTurn()) { showMessage('還未輪到你', 'error'); return; }
-  if(state.game_over) return;
-
-  const bankCount  = state.bank[gem] || 0;
-  const curSel     = selectedGems[gem] || 0;
-  const totalSel   = Object.values(selectedGems).reduce((a,b)=>a+b, 0);
-  const colors     = Object.keys(selectedGems).filter(g => selectedGems[g] > 0);
-
-  // 已選2顆同色 → 不能再選
-  if(curSel === 2){ showMessage('已選2顆同色，請確認或取消', 'info'); return; }
-
-  // 嘗試同色第二顆
-  if(curSel === 1 && colors.length === 1 && colors[0] === gem){
-    if(bankCount < 4){ showMessage(`${GEM_NAMES[gem]} 寶石不足4顆，無法拿2顆`, 'error'); return; }
-    if(totalSel >= 2){ showMessage('拿2顆同色時不能已選其他寶石', 'error'); return; }
-    selectedGems[gem] = 2;
-    sfxPickGem();
-    renderBank();
-    updateActionBar();
-    return;
-  }
-
-  // 已選了2顆同色 → 不能再選其他色
-  if(colors.length === 1 && selectedGems[colors[0]] === 2){
-    showMessage('已選2顆同色，請確認或取消', 'info'); return;
-  }
-
-  // 超過3顆不同色
-  if(totalSel >= 3){ showMessage('最多選3顆不同色寶石', 'info'); return; }
-  if(curSel > 0){ showMessage(`${GEM_NAMES[gem]} 已選取，不能重複`, 'info'); return; }
-  if(bankCount < 1){ showMessage('銀行寶石不足', 'error'); return; }
-
-  selectedGems[gem] = 1;
-  sfxPickGem();
-  renderBank();
-  updateActionBar();
-}
-
-// =============================================
-// 動作確認列
-// =============================================
-function updateActionBar(){
-  const bar      = document.getElementById('action-bar');
-  const infoEl   = document.getElementById('action-info-text');
-  const confirmEl= document.getElementById('btn-confirm-action');
-
-  const totalSel  = Object.values(selectedGems).reduce((a,b)=>a+b, 0);
-  const selColors = Object.keys(selectedGems).filter(g => selectedGems[g] > 0);
-
-  if(totalSel > 0){
-    bar.classList.remove('hidden');
-    const gemStr = selColors.map(g=>`${GEM_NAMES[g]}×${selectedGems[g]}`).join('、');
-    infoEl.innerHTML = `已選寶石：<strong>${gemStr}</strong>`;
-    confirmEl.classList.remove('hidden');
-  } else if(pendingAction){
-    bar.classList.remove('hidden');
-    if(pendingAction.type === 'reserve'){
-      if(pendingAction.level){
-        infoEl.innerHTML = `保留：<strong>等級 ${pendingAction.level} 覆蓋牌（未翻開）</strong>`;
-      } else {
-        // find card info from board
-        let card = null;
-        for(const lv of [1,2,3]){
-          for(const c of (state.board[String(lv)] || [])){
-            if(c && c.id === pendingAction.card_id){ card = c; break; }
-          }
-          if(card) break;
+          selBadge.textContent = '+' + sel;
+          div.appendChild(selBadge);
         }
-        infoEl.innerHTML = card
-          ? `保留：<strong>等級 ${card.level}・${GEM_NAMES[card.color]} 牌</strong>`
-          : '保留：<strong>場上牌</strong>';
+
+        if (!isGold && !isZero) {
+          div.addEventListener('click', () => onGemClick(gem));
+        }
+
+        el.appendChild(div);
+      });
+    }
+
+    // 點擊寶石
+    function onGemClick(gem) {
+      if (!isMyTurn()) { showMessage('還未輪到你', 'error'); return; }
+      if (state.game_over) return;
+
+      const bankCount = state.bank[gem] || 0;
+      const curSel = selectedGems[gem] || 0;
+      const totalSel = Object.values(selectedGems).reduce((a, b) => a + b, 0);
+      const colors = Object.keys(selectedGems).filter(g => selectedGems[g] > 0);
+
+      // 已選2顆同色 → 不能再選
+      if (curSel === 2) { showMessage('已選2顆同色，請確認或取消', 'info'); return; }
+
+      // 嘗試同色第二顆
+      if (curSel === 1 && colors.length === 1 && colors[0] === gem) {
+        if (bankCount < 4) { showMessage(`${GEM_NAMES[gem]} 寶石不足4顆，無法拿2顆`, 'error'); return; }
+        if (totalSel >= 2) { showMessage('拿2顆同色時不能已選其他寶石', 'error'); return; }
+        selectedGems[gem] = 2;
+        sfxPickGem();
+        renderBank();
+        updateActionBar();
+        return;
+      }
+
+      // 已選了2顆同色 → 不能再選其他色
+      if (colors.length === 1 && selectedGems[colors[0]] === 2) {
+        showMessage('已選2顆同色，請確認或取消', 'info'); return;
+      }
+
+      // 超過3顆不同色
+      if (totalSel >= 3) { showMessage('最多選3顆不同色寶石', 'info'); return; }
+      if (curSel > 0) { showMessage(`${GEM_NAMES[gem]} 已選取，不能重複`, 'info'); return; }
+      if (bankCount < 1) { showMessage('銀行寶石不足', 'error'); return; }
+
+      selectedGems[gem] = 1;
+      sfxPickGem();
+      renderBank();
+      updateActionBar();
+    }
+
+    // =============================================
+    // 動作確認列
+    // =============================================
+    function updateActionBar() {
+      const bar = document.getElementById('action-bar');
+      const infoEl = document.getElementById('action-info-text');
+      const confirmEl = document.getElementById('btn-confirm-action');
+
+      const totalSel = Object.values(selectedGems).reduce((a, b) => a + b, 0);
+      const selColors = Object.keys(selectedGems).filter(g => selectedGems[g] > 0);
+
+      if (totalSel > 0) {
+        bar.classList.remove('hidden');
+        const gemStr = selColors.map(g => `${GEM_NAMES[g]}×${selectedGems[g]}`).join('、');
+        infoEl.innerHTML = `已選寶石：<strong>${gemStr}</strong>`;
+        confirmEl.classList.remove('hidden');
+      } else if (pendingAction) {
+        bar.classList.remove('hidden');
+        if (pendingAction.type === 'reserve') {
+          if (pendingAction.level) {
+            infoEl.innerHTML = `保留：<strong>等級 ${pendingAction.level} 覆蓋牌（未翻開）</strong>`;
+          } else {
+            // find card info from board
+            let card = null;
+            for (const lv of [1, 2, 3]) {
+              for (const c of (state.board[String(lv)] || [])) {
+                if (c && c.id === pendingAction.card_id) { card = c; break; }
+              }
+              if (card) break;
+            }
+            infoEl.innerHTML = card
+              ? `保留：<strong>等級 ${card.level}・${GEM_NAMES[card.color]} 牌</strong>`
+              : '保留：<strong>場上牌</strong>';
+          }
+        }
+        confirmEl.classList.remove('hidden');
+      } else {
+        bar.classList.add('hidden');
       }
     }
-    confirmEl.classList.remove('hidden');
-  } else {
-    bar.classList.add('hidden');
-  }
-}
 
-function confirmAction(){
-  if(!isMyTurn()) return;
-  const totalSel = Object.values(selectedGems).reduce((a,b)=>a+b, 0);
-  if(totalSel > 0){
-    sfxGemCollect();
-    const action = { type:'take_gems', gems: {...selectedGems} };
-    doAction(action);
-    selectedGems = {};
-    return;
-  }
-  if(pendingAction){
-    document.querySelectorAll('.dev-card.selected').forEach(c => c.classList.remove('selected'));
-    doAction(pendingAction);
-    pendingAction = null;
-  }
-}
+    function confirmAction() {
+      if (!isMyTurn()) return;
+      const totalSel = Object.values(selectedGems).reduce((a, b) => a + b, 0);
+      if (totalSel > 0) {
+        sfxGemCollect();
+        const action = { type: 'take_gems', gems: { ...selectedGems } };
+        doAction(action);
+        selectedGems = {};
+        return;
+      }
+      if (pendingAction) {
+        document.querySelectorAll('.dev-card.selected').forEach(c => c.classList.remove('selected'));
+        doAction(pendingAction);
+        pendingAction = null;
+      }
+    }
 
-function cancelAction(){
-  selectedGems = {};
-  pendingAction = null;
-  document.querySelectorAll('.dev-card.selected').forEach(c => c.classList.remove('selected'));
-  renderBank();
-  updateActionBar();
-}
+    function cancelAction() {
+      selectedGems = {};
+      pendingAction = null;
+      document.querySelectorAll('.dev-card.selected').forEach(c => c.classList.remove('selected'));
+      renderBank();
+      updateActionBar();
+    }
 
-// =============================================
-// 發展卡渲染
-// =============================================
-function renderBoard(){
-  const el = document.getElementById('board-area');
-  el.innerHTML = '';
+    // =============================================
+    // 發展卡渲染
+    // =============================================
+    // 追蹤延遲翻牌的卡片：{ cardId: revealTimeMs }
+    let _pendingCards = {};
 
-  // 判斷哪些卡可以購買（用於高亮）
-  const affordableIds = new Set();
-  if(state && !state.game_over){
-    const player = state.players[state.current_player_idx];
-    [1,2,3].forEach(lv => {
-      (state.board[String(lv)] || []).forEach(card => {
-        if(card && canAfford(player, card)) affordableIds.add(card.id);
-      });
-      player.reserved.forEach(card => {
-        if(canAfford(player, card)) affordableIds.add(card.id);
-      });
-    });
-  }
+    function renderBoard() {
+      const el = document.getElementById('board-area');
+      el.innerHTML = '';
+      const now = Date.now();
 
-  [3,2,1].forEach(level => {
-    const row = document.createElement('div');
-    row.className = 'card-row';
+      // 判斷哪些卡可以購買（用於高亮）
+      const affordableIds = new Set();
+      if (state && !state.game_over) {
+        const player = state.players[state.current_player_idx];
+        [1, 2, 3].forEach(lv => {
+          (state.board[String(lv)] || []).forEach(card => {
+            if (card && canAfford(player, card)) affordableIds.add(card.id);
+          });
+          player.reserved.forEach(card => {
+            if (canAfford(player, card)) affordableIds.add(card.id);
+          });
+        });
+      }
 
-    // 牌堆
-    const deckCount = state.deck_counts[String(level)] || 0;
-    const pile = document.createElement('div');
-    pile.className = 'deck-pile';
-    pile.innerHTML = `
+      [3, 2, 1].forEach(level => {
+        const row = document.createElement('div');
+        row.className = 'card-row';
+
+        // 牌堆
+        const deckCount = state.deck_counts[String(level)] || 0;
+        const pile = document.createElement('div');
+        pile.className = 'deck-pile';
+        pile.innerHTML = `
       <div class="lv-badge">等級${level}</div>
       <div class="deck-count">${deckCount}</div>
       <div class="deck-label">張牌</div>
     `;
-    pile.title = `點擊可保留等級${level}牌堆頂部的卡`;
-    if(isMyTurn() && !state.game_over && deckCount > 0){
-      pile.addEventListener('click', () => onReserveFromDeck(level));
+        pile.title = `點擊可保留等級${level}牌堆頂部的卡`;
+        if (isMyTurn() && !state.game_over && deckCount > 0) {
+          pile.addEventListener('click', () => onReserveFromDeck(level));
+        }
+        row.appendChild(pile);
+
+        // 場上4張
+        const cards = state.board[String(level)] || [];
+        cards.forEach((card, i) => {
+          let isNew = false;
+          let isPending = false;
+
+          if (card && !_prevBoardIds.has(card.id)) {
+            if (!_pendingCards[card.id]) {
+              _pendingCards[card.id] = now + 1500; // 1.5秒延遲
+            }
+
+            if (now < _pendingCards[card.id]) {
+              isPending = true;
+              setTimeout(() => { renderAll(); }, _pendingCards[card.id] - now + 50);
+            } else {
+              delete _pendingCards[card.id];
+              isNew = true;
+            }
+          }
+
+          if (isPending) {
+            // 顯示一個空位直到延遲結束
+            const el2 = buildCardEl(null, affordableIds, false, false);
+            row.appendChild(el2);
+          } else {
+            const el2 = buildCardEl(card, affordableIds, false, isNew);
+            row.appendChild(el2);
+          }
+        });
+
+        el.appendChild(row);
+      });
+
+      // 更新「上一次場上的卡」集合，供下次渲染判斷新卡
+      _prevBoardIds = new Set();
+      [1, 2, 3].forEach(lv => {
+        (state.board[String(lv)] || []).forEach(c => {
+          if (c && !_pendingCards[c.id]) _prevBoardIds.add(c.id);
+        });
+      });
     }
-    row.appendChild(pile);
 
-    // 場上4張
-    const cards = state.board[String(level)] || [];
-    cards.forEach((card, i) => {
-      const isNew = card && !_prevBoardIds.has(card.id);
-      const el2 = buildCardEl(card, affordableIds, false, isNew);
-      row.appendChild(el2);
-    });
+    // 追蹤上一次渲染時場上的卡 id（用於偵測新出現的卡）
+    let _prevBoardIds = new Set();
 
-    el.appendChild(row);
-  });
+    function buildCardEl(card, affordableIds, isReserved, isNew = false) {
+      const el = document.createElement('div');
+      if (!card) {
+        el.className = 'dev-card empty-slot';
+        return el;
+      }
+      el.className = 'dev-card' +
+        (affordableIds && affordableIds.has(card.id) ? ' affordable' : '') +
+        (isNew ? ' card-flip-in' : '');
+      el.dataset.cardId = card.id;
 
-  // 更新「上一次場上的卡」集合，供下次渲染判斷新卡
-  _prevBoardIds = new Set();
-  [1,2,3].forEach(lv => {
-    (state.board[String(lv)] || []).forEach(c => { if(c) _prevBoardIds.add(c.id); });
-  });
-}
+      // 頂部：點數 + 顏色
+      const top = document.createElement('div');
+      top.className = 'card-top';
 
-// 追蹤上一次渲染時場上的卡 id（用於偵測新出現的卡）
-let _prevBoardIds = new Set();
+      const pts = document.createElement('div');
+      pts.className = 'card-points';
+      pts.textContent = card.points > 0 ? card.points : '';
+      top.appendChild(pts);
 
-function buildCardEl(card, affordableIds, isReserved, isNew = false){
-  const el = document.createElement('div');
-  if(!card){
-    el.className = 'dev-card empty-slot';
-    return el;
-  }
-  el.className = 'dev-card' +
-    (affordableIds && affordableIds.has(card.id) ? ' affordable' : '') +
-    (isNew ? ' card-flip-in' : '');
-  el.dataset.cardId = card.id;
+      const colorDot = document.createElement('div');
+      colorDot.className = `card-gem-color ${gemClass(card.color)}`;
+      top.appendChild(colorDot);
+      el.appendChild(top);
 
-  // 頂部：點數 + 顏色
-  const top = document.createElement('div');
-  top.className = 'card-top';
-
-  const pts = document.createElement('div');
-  pts.className = 'card-points';
-  pts.textContent = card.points > 0 ? card.points : '';
-  top.appendChild(pts);
-
-  const colorDot = document.createElement('div');
-  colorDot.className = `card-gem-color ${gemClass(card.color)}`;
-  top.appendChild(colorDot);
-  el.appendChild(top);
-
-  // 費用
-  const costs = document.createElement('div');
-  costs.className = 'card-costs';
-  GEM_COLORS.forEach(g => {
-    const cost = card.cost[g] || 0;
-    if(cost <= 0) return;
-    const row = document.createElement('div');
-    row.className = 'cost-row';
-    row.innerHTML = `
+      // 費用
+      const costs = document.createElement('div');
+      costs.className = 'card-costs';
+      GEM_COLORS.forEach(g => {
+        const cost = card.cost[g] || 0;
+        if (cost <= 0) return;
+        const row = document.createElement('div');
+        row.className = 'cost-row';
+        row.innerHTML = `
       <div class="cost-dot ${gemClass(g)}"></div>
       <span class="cost-num">${cost}</span>
     `;
-    costs.appendChild(row);
-  });
-  el.appendChild(costs);
-
-  // 操作按鈕（hover 顯示）
-  if(isMyTurn() && !state.game_over){
-    const hint = document.createElement('div');
-    hint.className = 'card-action-hint';
-    const buyBtn = document.createElement('div');
-    buyBtn.className = 'btn-buy';
-    buyBtn.textContent = '購買';
-    buyBtn.addEventListener('click', e => { e.stopPropagation(); onBuyCard(card.id); });
-
-    hint.appendChild(buyBtn);
-
-    if(!isReserved){
-      const resBtn = document.createElement('div');
-      resBtn.className = 'btn-reserve';
-      resBtn.textContent = '保留';
-      resBtn.addEventListener('click', e => { e.stopPropagation(); onReserveCard(card.id); });
-      hint.appendChild(resBtn);
-    }
-    el.appendChild(hint);
-  }
-
-  return el;
-}
-
-// =============================================
-// 貴族牌渲染
-// =============================================
-function renderNobles(){
-  const el = document.getElementById('nobles-area');
-  el.innerHTML = '';
-  (state.nobles || []).forEach(noble => {
-    const div = document.createElement('div');
-    div.className = 'noble-card';
-    const pts = document.createElement('div');
-    pts.className = 'noble-points';
-    pts.textContent = `${noble.points} ★`;
-    div.appendChild(pts);
-
-    const req = document.createElement('div');
-    req.className = 'noble-req';
-    GEM_COLORS.forEach(g => {
-      const cnt = noble.requirement[g] || 0;
-      if(cnt <= 0) return;
-      const item = document.createElement('div');
-      item.className = 'noble-req-item';
-      item.innerHTML = `<div class="noble-req-dot ${gemClass(g)}"></div>${cnt}`;
-      req.appendChild(item);
-    });
-    div.appendChild(req);
-    el.appendChild(div);
-  });
-}
-
-// =============================================
-// 玩家面板渲染
-// =============================================
-function renderPlayers(){
-  const el = document.getElementById('players-area');
-  el.innerHTML = '';
-
-  state.players.forEach((player, idx) => {
-    const isActive = idx === state.current_player_idx && !state.game_over;
-    const panel = document.createElement('div');
-    panel.className = 'player-panel' + (isActive ? ' active-player' : '');
-
-    // 標頭
-    const header = document.createElement('div');
-    header.className = 'player-header';
-    const nameEl = document.createElement('div');
-    nameEl.className = 'player-name';
-    nameEl.textContent = player.name + (isActive ? ' ●' : '');
-    const scoreEl = document.createElement('div');
-    scoreEl.style.textAlign = 'right';
-    scoreEl.innerHTML = `<div class="player-score">${player.score}</div><div class="player-score-label">勝利點數</div>`;
-    header.appendChild(nameEl);
-    header.appendChild(scoreEl);
-    panel.appendChild(header);
-
-    // 寶石
-    const gemLabel = document.createElement('div');
-    gemLabel.className = 'player-section-label';
-    gemLabel.textContent = `寶石（${GEM_ALL.reduce((a,g)=>a+(player.gems[g]||0), 0)}/10）`;
-    panel.appendChild(gemLabel);
-    const gemsEl = document.createElement('div');
-    gemsEl.className = 'player-gems';
-    GEM_ALL.forEach(g => {
-      const cnt = player.gems[g] || 0;
-      if(cnt <= 0) return;
-      const item = document.createElement('div');
-      item.className = 'player-gem-item';
-      const dot = document.createElement('div');
-      dot.className = `player-gem-dot ${gemClass(g)}` + (g==='black'?' gem-black':'');
-      item.appendChild(dot);
-      item.appendChild(document.createTextNode(cnt));
-      gemsEl.appendChild(item);
-    });
-    panel.appendChild(gemsEl);
-
-    // 已購卡（折扣摘要）
-    const cardLabel = document.createElement('div');
-    cardLabel.className = 'player-section-label';
-    cardLabel.textContent = `已購卡（${player.cards.length}張）`;
-    panel.appendChild(cardLabel);
-    const cardsEl = document.createElement('div');
-    cardsEl.className = 'player-cards-summary';
-    const bonus = player.gem_bonus;
-    GEM_COLORS.forEach(g => {
-      const cnt = bonus[g] || 0;
-      if(cnt <= 0) return;
-      const item = document.createElement('div');
-      item.className = 'card-summary-item';
-      const dot = document.createElement('div');
-      dot.style.cssText = `width:10px;height:10px;border-radius:50%;${gemStyle(g)}`;
-      item.appendChild(dot);
-      item.appendChild(document.createTextNode(`×${cnt}`));
-      cardsEl.appendChild(item);
-    });
-    if(player.cards.length === 0){
-      cardsEl.innerHTML = `<span style="color:var(--text-dim);font-size:0.8rem;">（無）</span>`;
-    }
-    panel.appendChild(cardsEl);
-
-    // 保留手牌
-    const resLabel = document.createElement('div');
-    resLabel.className = 'player-section-label';
-    resLabel.textContent = `保留手牌（${player.reserved.length}/3）`;
-    panel.appendChild(resLabel);
-    const resEl = document.createElement('div');
-    resEl.className = 'player-reserved';
-
-    const affordIds = new Set();
-    if(isActive){
-      player.reserved.forEach(c => {
-        if(canAfford(player, c)) affordIds.add(c.id);
+        costs.appendChild(row);
       });
-    }
+      el.appendChild(costs);
 
-    player.reserved.forEach(card => {
-      const cardEl = document.createElement('div');
-      cardEl.className = 'reserved-card' + (affordIds.has(card.id) ? ' affordable' : '');
-      // 迷你卡牌內容
-      const topRow = document.createElement('div');
-      topRow.style.cssText = 'display:flex;justify-content:space-between;';
-      const ptsEl = document.createElement('div');
-      ptsEl.style.cssText = 'font-size:0.8rem;font-weight:900;color:var(--gold-bright);';
-      ptsEl.textContent = card.points > 0 ? card.points : '';
-      const colDot = document.createElement('div');
-      colDot.className = `card-gem-color ${gemClass(card.color)}`;
-      colDot.style.cssText = `width:14px;height:14px;border-radius:50%;${gemStyle(card.color)}`;
-      topRow.appendChild(ptsEl);
-      topRow.appendChild(colDot);
-      cardEl.appendChild(topRow);
+      // 操作按鈕（hover 顯示）
+      if (isMyTurn() && !state.game_over) {
+        const hint = document.createElement('div');
+        hint.className = 'card-action-hint';
+        const buyBtn = document.createElement('div');
+        buyBtn.className = 'btn-buy';
+        buyBtn.textContent = '購買';
+        buyBtn.addEventListener('click', e => { e.stopPropagation(); onBuyCard(card.id); });
 
-      // 費用
-      const costsDiv = document.createElement('div');
-      costsDiv.style.cssText = 'margin-top:4px;';
-      GEM_COLORS.forEach(g => {
-        const c = card.cost[g] || 0;
-        if(c <= 0) return;
-        const r = document.createElement('div');
-        r.style.cssText = 'display:flex;align-items:center;gap:2px;font-size:0.62rem;font-weight:700;';
-        r.innerHTML = `<div style="width:7px;height:7px;border-radius:50%;${gemStyle(g)}"></div>${c}`;
-        costsDiv.appendChild(r);
-      });
-      cardEl.appendChild(costsDiv);
+        hint.appendChild(buyBtn);
 
-      if(isMyTurn() && idx === myPlayerIdx){
-        cardEl.title = '點擊購買';
-        cardEl.addEventListener('click', () => onBuyCard(card.id));
+        if (!isReserved) {
+          const resBtn = document.createElement('div');
+          resBtn.className = 'btn-reserve';
+          resBtn.textContent = '保留';
+          resBtn.addEventListener('click', e => { e.stopPropagation(); onReserveCard(card.id); });
+          hint.appendChild(resBtn);
+        }
+        el.appendChild(hint);
       }
-      resEl.appendChild(cardEl);
-    });
 
-    if(player.reserved.length === 0){
-      resEl.innerHTML = `<span style="color:var(--text-dim);font-size:0.8rem;">（無）</span>`;
+      return el;
     }
-    panel.appendChild(resEl);
 
-    // 貴族獎章
-    if(player.nobles.length > 0){
-      const nLabel = document.createElement('div');
-      nLabel.className = 'player-section-label';
-      nLabel.textContent = `貴族（${player.nobles.length}）`;
-      panel.appendChild(nLabel);
-      const nEl = document.createElement('div');
-      nEl.style.cssText = 'display:flex;gap:0.4rem;flex-wrap:wrap;';
-      player.nobles.forEach(n => {
-        const badge = document.createElement('div');
-        badge.style.cssText = `
+    // =============================================
+    // 貴族牌渲染
+    // =============================================
+    function renderNobles() {
+      const el = document.getElementById('nobles-area');
+      el.innerHTML = '';
+      (state.nobles || []).forEach(noble => {
+        const div = document.createElement('div');
+        div.className = 'noble-card';
+        const pts = document.createElement('div');
+        pts.className = 'noble-points';
+        pts.textContent = `${noble.points} ★`;
+        div.appendChild(pts);
+
+        const req = document.createElement('div');
+        req.className = 'noble-req';
+        GEM_COLORS.forEach(g => {
+          const cnt = noble.requirement[g] || 0;
+          if (cnt <= 0) return;
+          const item = document.createElement('div');
+          item.className = 'noble-req-item';
+          item.innerHTML = `<div class="noble-req-dot ${gemClass(g)}"></div>${cnt}`;
+          req.appendChild(item);
+        });
+        div.appendChild(req);
+        el.appendChild(div);
+      });
+    }
+
+    // =============================================
+    // 玩家面板渲染
+    // =============================================
+    function renderPlayers() {
+      const el = document.getElementById('players-area');
+      el.innerHTML = '';
+
+      state.players.forEach((player, idx) => {
+        const isActive = idx === state.current_player_idx && !state.game_over;
+        const panel = document.createElement('div');
+        panel.className = 'player-panel' + (isActive ? ' active-player' : '');
+
+        // 標頭
+        const header = document.createElement('div');
+        header.className = 'player-header';
+        const nameEl = document.createElement('div');
+        nameEl.className = 'player-name';
+        nameEl.textContent = player.name + (isActive ? ' ●' : '');
+        const scoreEl = document.createElement('div');
+        scoreEl.style.textAlign = 'right';
+        scoreEl.innerHTML = `<div class="player-score">${player.score}</div><div class="player-score-label">勝利點數</div>`;
+        header.appendChild(nameEl);
+        header.appendChild(scoreEl);
+        panel.appendChild(header);
+
+        // 寶石
+        const gemLabel = document.createElement('div');
+        gemLabel.className = 'player-section-label';
+        gemLabel.textContent = `寶石（${GEM_ALL.reduce((a, g) => a + (player.gems[g] || 0), 0)}/10）`;
+        panel.appendChild(gemLabel);
+        const gemsEl = document.createElement('div');
+        gemsEl.className = 'player-gems';
+        GEM_ALL.forEach(g => {
+          const cnt = player.gems[g] || 0;
+          if (cnt <= 0) return;
+          const item = document.createElement('div');
+          item.className = 'player-gem-item';
+          const dot = document.createElement('div');
+          dot.className = `player-gem-dot ${gemClass(g)}` + (g === 'black' ? ' gem-black' : '');
+          item.appendChild(dot);
+          item.appendChild(document.createTextNode(cnt));
+          gemsEl.appendChild(item);
+        });
+        panel.appendChild(gemsEl);
+
+        // 已購卡（折扣摘要）
+        const cardLabel = document.createElement('div');
+        cardLabel.className = 'player-section-label';
+        cardLabel.textContent = `已購卡（${player.cards.length}張）`;
+        panel.appendChild(cardLabel);
+        const cardsEl = document.createElement('div');
+        cardsEl.className = 'player-cards-summary';
+        const bonus = player.gem_bonus;
+        GEM_COLORS.forEach(g => {
+          const cnt = bonus[g] || 0;
+          if (cnt <= 0) return;
+          const item = document.createElement('div');
+          item.className = 'card-summary-item';
+          const dot = document.createElement('div');
+          dot.style.cssText = `width:10px;height:10px;border-radius:50%;${gemStyle(g)}`;
+          item.appendChild(dot);
+          item.appendChild(document.createTextNode(`×${cnt}`));
+          cardsEl.appendChild(item);
+        });
+        if (player.cards.length === 0) {
+          cardsEl.innerHTML = `<span style="color:var(--text-dim);font-size:0.8rem;">（無）</span>`;
+        }
+        panel.appendChild(cardsEl);
+
+        // 保留手牌
+        const resLabel = document.createElement('div');
+        resLabel.className = 'player-section-label';
+        resLabel.textContent = `保留手牌（${player.reserved.length}/3）`;
+        panel.appendChild(resLabel);
+        const resEl = document.createElement('div');
+        resEl.className = 'player-reserved';
+
+        const affordIds = new Set();
+        if (isActive) {
+          player.reserved.forEach(c => {
+            if (canAfford(player, c)) affordIds.add(c.id);
+          });
+        }
+
+        player.reserved.forEach(card => {
+          const cardEl = document.createElement('div');
+          cardEl.className = 'reserved-card' + (affordIds.has(card.id) ? ' affordable' : '');
+          // 迷你卡牌內容
+          const topRow = document.createElement('div');
+          topRow.style.cssText = 'display:flex;justify-content:space-between;';
+          const ptsEl = document.createElement('div');
+          ptsEl.style.cssText = 'font-size:0.8rem;font-weight:900;color:var(--gold-bright);';
+          ptsEl.textContent = card.points > 0 ? card.points : '';
+          const colDot = document.createElement('div');
+          colDot.className = `card-gem-color ${gemClass(card.color)}`;
+          colDot.style.cssText = `width:14px;height:14px;border-radius:50%;${gemStyle(card.color)}`;
+          topRow.appendChild(ptsEl);
+          topRow.appendChild(colDot);
+          cardEl.appendChild(topRow);
+
+          // 費用
+          const costsDiv = document.createElement('div');
+          costsDiv.style.cssText = 'margin-top:4px;';
+          GEM_COLORS.forEach(g => {
+            const c = card.cost[g] || 0;
+            if (c <= 0) return;
+            const r = document.createElement('div');
+            r.style.cssText = 'display:flex;align-items:center;gap:2px;font-size:0.62rem;font-weight:700;';
+            r.innerHTML = `<div style="width:7px;height:7px;border-radius:50%;${gemStyle(g)}"></div>${c}`;
+            costsDiv.appendChild(r);
+          });
+          cardEl.appendChild(costsDiv);
+
+          if (isMyTurn() && idx === myPlayerIdx) {
+            cardEl.title = '點擊購買';
+            cardEl.addEventListener('click', () => onBuyCard(card.id));
+          }
+          resEl.appendChild(cardEl);
+        });
+
+        if (player.reserved.length === 0) {
+          resEl.innerHTML = `<span style="color:var(--text-dim);font-size:0.8rem;">（無）</span>`;
+        }
+        panel.appendChild(resEl);
+
+        // 貴族獎章
+        if (player.nobles.length > 0) {
+          const nLabel = document.createElement('div');
+          nLabel.className = 'player-section-label';
+          nLabel.textContent = `貴族（${player.nobles.length}）`;
+          panel.appendChild(nLabel);
+          const nEl = document.createElement('div');
+          nEl.style.cssText = 'display:flex;gap:0.4rem;flex-wrap:wrap;';
+          player.nobles.forEach(n => {
+            const badge = document.createElement('div');
+            badge.style.cssText = `
           background:rgba(201,168,76,0.2);border:1px solid var(--gold);
           border-radius:8px;padding:3px 8px;font-size:0.8rem;font-weight:700;
           color:var(--gold-bright);
         `;
-        badge.textContent = `🎖 ${n.points}分`;
-        nEl.appendChild(badge);
+            badge.textContent = `🎖 ${n.points}分`;
+            nEl.appendChild(badge);
+          });
+          panel.appendChild(nEl);
+        }
+
+        el.appendChild(panel);
       });
-      panel.appendChild(nEl);
     }
 
-    el.appendChild(panel);
-  });
-}
-
-// =============================================
-// 動作執行
-// =============================================
-function isMyTurn(){
-  if(!state) return false;
-  if(state.game_over) return false;
-  if(mode === 'pvp') return true; // PvP 兩人都在同台電腦
-  return state.current_player_idx === myPlayerIdx;
-}
-
-async function doAction(action){
-  if(!gameId) return;
-
-  // 記錄觸發動畫需要的資訊（動作前取得位置）
-  const actingPlayer = state.current_player_idx;
-
-  try {
-    const res = await fetch(`${API}/action`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        game_id: gameId,
-        action,
-        player_id: actingPlayer
-      })
-    });
-    const data = await res.json();
-    if(!res.ok){
-      sfxError();
-      showMessage(data.detail || '動作不合法', 'error');
-      return;
+    // =============================================
+    // 動作執行
+    // =============================================
+    function isMyTurn() {
+      if (!state) return false;
+      if (state.game_over) return false;
+      if (mode === 'pvp') return true; // PvP 兩人都在同台電腦
+      return state.current_player_idx === myPlayerIdx;
     }
 
-    // ── 依動作類型播放音效 + 動畫（渲染交給 WebSocket state_update 處理）──
-    if(action.type === 'take_gems'){
-      Object.entries(action.gems).forEach(([color, count]) => {
-        animateGemFly(color, count, actingPlayer);
-      });
-    } else if(action.type === 'reserve'){
-      sfxReserveCard();
-    } else if(action.type === 'buy'){
-      sfxBuyCard();
+    async function doAction(action) {
+      if (!gameId) return;
+
+      // 記錄觸發動畫需要的資訊（動作前取得位置）
+      const actingPlayer = state.current_player_idx;
+
+      try {
+        const res = await fetch(`${API}/action`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            game_id: gameId,
+            action,
+            player_id: actingPlayer
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          sfxError();
+          showMessage(data.detail || '動作不合法', 'error');
+          return;
+        }
+
+        // ── 依動作類型播放音效 + 動畫（渲染交給 WebSocket state_update 處理）──
+        if (action.type === 'take_gems') {
+          Object.entries(action.gems).forEach(([color, count]) => {
+            animateGemFly(color, count, actingPlayer);
+          });
+        } else if (action.type === 'reserve') {
+          sfxReserveCard();
+          animateCardFly(action.card_id, actingPlayer, action.level);
+        } else if (action.type === 'buy') {
+          sfxBuyCard();
+          animateCardFly(action.card_id, actingPlayer, null);
+        }
+
+        // 不在此處 renderAll()，讓 WebSocket state_update 負責渲染
+        // 這樣 _prevBoardIds 尚未更新，新牌才能正確觸發翻牌動畫
+        state = data.state;
+
+      } catch (e) {
+        showMessage('連線錯誤', 'error');
+      }
     }
 
-    // 不在此處 renderAll()，讓 WebSocket state_update 負責渲染
-    // 這樣 _prevBoardIds 尚未更新，新牌才能正確觸發翻牌動畫
-    state = data.state;
+    // ── 購買確認 modal ─────────────────────────
+    let _pendingBuyCardId = null;
 
-  } catch(e){
-    showMessage('連線錯誤', 'error');
-  }
-}
-
-// ── 購買確認 modal ─────────────────────────
-let _pendingBuyCardId = null;
-
-function onBuyCard(cardId){
-  if(!isMyTurn()) { showMessage('還未輪到你', 'error'); return; }
-  showBuyConfirm(cardId);
-}
-
-/**
- * 計算前端版的實際費用（與後端 _effective_cost 邏輯一致）
- * 回傳 { white, blue, green, red, black, gold, canAfford }
- */
-function calcPayment(player, card){
-  const bonus = player.gem_bonus || {};
-  let goldNeeded = 0;
-  const pay = {};
-  for(const g of GEM_COLORS){
-    const raw       = card.cost[g] || 0;
-    const afterDisc = raw - (bonus[g] || 0);
-    if(afterDisc <= 0){ pay[g] = 0; continue; }
-    const have = player.gems[g] || 0;
-    if(have >= afterDisc){
-      pay[g] = afterDisc;
-    } else {
-      pay[g] = have;
-      goldNeeded += afterDisc - have;
+    function onBuyCard(cardId) {
+      if (!isMyTurn()) { showMessage('還未輪到你', 'error'); return; }
+      showBuyConfirm(cardId);
     }
-  }
-  pay.gold = goldNeeded;
-  pay.canAfford = goldNeeded <= (player.gems.gold || 0);
-  return pay;
-}
 
-function showBuyConfirm(cardId){
-  // 找到這張卡（場上或保留手牌）
-  let card = null;
-  for(const lv of [1,2,3]){
-    for(const c of (state.board[String(lv)] || [])){
-      if(c && c.id === cardId){ card = c; break; }
+    /**
+     * 計算前端版的實際費用（與後端 _effective_cost 邏輯一致）
+     * 回傳 { white, blue, green, red, black, gold, canAfford }
+     */
+    function calcPayment(player, card) {
+      const bonus = player.gem_bonus || {};
+      let goldNeeded = 0;
+      const pay = {};
+      for (const g of GEM_COLORS) {
+        const raw = card.cost[g] || 0;
+        const afterDisc = raw - (bonus[g] || 0);
+        if (afterDisc <= 0) { pay[g] = 0; continue; }
+        const have = player.gems[g] || 0;
+        if (have >= afterDisc) {
+          pay[g] = afterDisc;
+        } else {
+          pay[g] = have;
+          goldNeeded += afterDisc - have;
+        }
+      }
+      pay.gold = goldNeeded;
+      pay.canAfford = goldNeeded <= (player.gems.gold || 0);
+      return pay;
     }
-    if(card) break;
-  }
-  if(!card){
-    const player = state.players[state.current_player_idx];
-    card = player.reserved.find(c => c.id === cardId) || null;
-  }
-  if(!card){ showMessage('找不到該卡片', 'error'); return; }
 
-  const player  = state.players[state.current_player_idx];
-  const payment = calcPayment(player, card);
+    function showBuyConfirm(cardId) {
+      // 找到這張卡（場上或保留手牌）
+      let card = null;
+      for (const lv of [1, 2, 3]) {
+        for (const c of (state.board[String(lv)] || [])) {
+          if (c && c.id === cardId) { card = c; break; }
+        }
+        if (card) break;
+      }
+      if (!card) {
+        const player = state.players[state.current_player_idx];
+        card = player.reserved.find(c => c.id === cardId) || null;
+      }
+      if (!card) { showMessage('找不到該卡片', 'error'); return; }
 
-  _pendingBuyCardId = cardId;
+      const player = state.players[state.current_player_idx];
+      const payment = calcPayment(player, card);
 
-  // 標題
-  document.getElementById('buy-confirm-title').textContent =
-    `確認購買（等級 ${card.level}・${GEM_NAMES[card.color]} 加成${card.points > 0 ? '・' + card.points + ' 分' : ''}）`;
-  document.getElementById('buy-confirm-card-info').textContent = '';
+      _pendingBuyCardId = cardId;
 
-  // 費用 chips
-  const listEl = document.getElementById('buy-cost-list');
-  listEl.innerHTML = '';
+      // 標題
+      document.getElementById('buy-confirm-title').textContent =
+        `確認購買（等級 ${card.level}・${GEM_NAMES[card.color]} 加成${card.points > 0 ? '・' + card.points + ' 分' : ''}）`;
+      document.getElementById('buy-confirm-card-info').textContent = '';
 
-  let hasAnyCost = false;
-  for(const g of GEM_COLORS){
-    const amt = payment[g];
-    if(amt <= 0) continue;
-    hasAnyCost = true;
-    const chip = document.createElement('div');
-    chip.className = 'buy-cost-chip';
-    chip.innerHTML = `
+      // 費用 chips
+      const listEl = document.getElementById('buy-cost-list');
+      listEl.innerHTML = '';
+
+      let hasAnyCost = false;
+      for (const g of GEM_COLORS) {
+        const amt = payment[g];
+        if (amt <= 0) continue;
+        hasAnyCost = true;
+        const chip = document.createElement('div');
+        chip.className = 'buy-cost-chip';
+        chip.innerHTML = `
       <div class="chip-dot ${gemClass(g)}" style="${gemStyle(g)}"></div>
       <span>${GEM_NAMES[g]} × ${amt}</span>
     `;
-    listEl.appendChild(chip);
-  }
-  if(payment.gold > 0){
-    hasAnyCost = true;
-    const chip = document.createElement('div');
-    chip.className = 'buy-cost-chip gold-chip';
-    chip.innerHTML = `
+        listEl.appendChild(chip);
+      }
+      if (payment.gold > 0) {
+        hasAnyCost = true;
+        const chip = document.createElement('div');
+        chip.className = 'buy-cost-chip gold-chip';
+        chip.innerHTML = `
       <div class="chip-dot" style="${gemStyle('gold')}border-radius:50%;"></div>
       <span>黃金（萬用）× ${payment.gold}</span>
     `;
-    listEl.appendChild(chip);
-  }
-  if(!hasAnyCost){
-    listEl.innerHTML = `<span style="color:var(--green-ok);font-weight:700;">免費！</span>`;
-  }
+        listEl.appendChild(chip);
+      }
+      if (!hasAnyCost) {
+        listEl.innerHTML = `<span style="color:var(--green-ok);font-weight:700;">免費！</span>`;
+      }
 
-  // 是否負擔得起
-  const errEl = document.getElementById('buy-not-affordable');
-  const confirmBtn = document.getElementById('btn-confirm-buy');
-  if(!payment.canAfford){
-    const short = payment.gold - (player.gems.gold || 0);
-    errEl.textContent  = `黃金不足！還差 ${short} 顆萬用幣`;
-    errEl.style.display = '';
-    confirmBtn.disabled = true;
-    confirmBtn.style.opacity = '0.4';
-  } else {
-    errEl.style.display = 'none';
-    confirmBtn.disabled = false;
-    confirmBtn.style.opacity = '';
-  }
+      // 是否負擔得起
+      const errEl = document.getElementById('buy-not-affordable');
+      const confirmBtn = document.getElementById('btn-confirm-buy');
+      if (!payment.canAfford) {
+        const short = payment.gold - (player.gems.gold || 0);
+        errEl.textContent = `黃金不足！還差 ${short} 顆萬用幣`;
+        errEl.style.display = '';
+        confirmBtn.disabled = true;
+        confirmBtn.style.opacity = '0.4';
+      } else {
+        errEl.style.display = 'none';
+        confirmBtn.disabled = false;
+        confirmBtn.style.opacity = '';
+      }
 
-  document.getElementById('buy-confirm-panel').style.display = 'block';
-}
+      document.getElementById('buy-confirm-panel').style.display = 'block';
+    }
 
-function onReserveCard(cardId){
-  if(!isMyTurn()) { showMessage('還未輪到你', 'error'); return; }
-  const player = state.players[state.current_player_idx];
-  if(player.reserved.length >= 3){
-    showMessage('保留手牌已達上限（3張）', 'error'); return;
-  }
-  // highlight card and wait for confirmation
-  document.querySelectorAll('.dev-card.selected').forEach(c => c.classList.remove('selected'));
-  const cardEl = document.querySelector(`.dev-card[data-card-id="${cardId}"]`);
-  if(cardEl) cardEl.classList.add('selected');
-  selectedGems = {};
-  pendingAction = { type:'reserve', card_id: cardId };
-  updateActionBar();
-}
+    function onReserveCard(cardId) {
+      if (!isMyTurn()) { showMessage('還未輪到你', 'error'); return; }
+      const player = state.players[state.current_player_idx];
+      if (player.reserved.length >= 3) {
+        showMessage('保留手牌已達上限（3張）', 'error'); return;
+      }
+      // highlight card and wait for confirmation
+      document.querySelectorAll('.dev-card.selected').forEach(c => c.classList.remove('selected'));
+      const cardEl = document.querySelector(`.dev-card[data-card-id="${cardId}"]`);
+      if (cardEl) cardEl.classList.add('selected');
+      selectedGems = {};
+      pendingAction = { type: 'reserve', card_id: cardId };
+      updateActionBar();
+    }
 
-function onReserveFromDeck(level){
-  if(!isMyTurn()) { showMessage('還未輪到你', 'error'); return; }
-  const player = state.players[state.current_player_idx];
-  if(player.reserved.length >= 3){
-    showMessage('保留手牌已達上限（3張）', 'error'); return;
-  }
-  document.querySelectorAll('.dev-card.selected').forEach(c => c.classList.remove('selected'));
-  selectedGems = {};
-  pendingAction = { type:'reserve', level };
-  updateActionBar();
-}
+    function onReserveFromDeck(level) {
+      if (!isMyTurn()) { showMessage('還未輪到你', 'error'); return; }
+      const player = state.players[state.current_player_idx];
+      if (player.reserved.length >= 3) {
+        showMessage('保留手牌已達上限（3張）', 'error'); return;
+      }
+      document.querySelectorAll('.dev-card.selected').forEach(c => c.classList.remove('selected'));
+      selectedGems = {};
+      pendingAction = { type: 'reserve', level };
+      updateActionBar();
+    }
 
-// =============================================
-// 可否負擔（前端本地計算，僅用於高亮）
-// =============================================
-function canAfford(player, card){
-  const bonus = player.gem_bonus;
-  let goldNeeded = 0;
-  for(const g of GEM_COLORS){
-    const cost = (card.cost[g] || 0) - (bonus[g] || 0);
-    if(cost <= 0) continue;
-    const have = player.gems[g] || 0;
-    if(have >= cost) continue;
-    goldNeeded += cost - have;
-  }
-  return goldNeeded <= (player.gems.gold || 0);
-}
+    // =============================================
+    // 可否負擔（前端本地計算，僅用於高亮）
+    // =============================================
+    function canAfford(player, card) {
+      const bonus = player.gem_bonus;
+      let goldNeeded = 0;
+      for (const g of GEM_COLORS) {
+        const cost = (card.cost[g] || 0) - (bonus[g] || 0);
+        if (cost <= 0) continue;
+        const have = player.gems[g] || 0;
+        if (have >= cost) continue;
+        goldNeeded += cost - have;
+      }
+      return goldNeeded <= (player.gems.gold || 0);
+    }
 
-// =============================================
-// 棄牌面板
-// =============================================
-function openDiscardPanel(playerIdx, st){
-  const player = st.players[playerIdx];
-  discardPlayerId = playerIdx;
-  discardExcess = player.gems
-    ? Object.values(player.gems).reduce((a,b)=>a+b, 0) - 10
-    : 0;
-  if(discardExcess <= 0) return;
+    // =============================================
+    // 棄牌面板
+    // =============================================
+    function openDiscardPanel(playerIdx, st) {
+      const player = st.players[playerIdx];
+      discardPlayerId = playerIdx;
+      discardExcess = player.gems
+        ? Object.values(player.gems).reduce((a, b) => a + b, 0) - 10
+        : 0;
+      if (discardExcess <= 0) return;
 
-  discardState = {};
-  document.getElementById('discard-info').textContent =
-    `你持有 ${player.gems ? Object.values(player.gems).reduce((a,b)=>a+b,0) : 0} 顆寶石，需歸還 ${discardExcess} 顆`;
+      discardState = {};
+      document.getElementById('discard-info').textContent =
+        `你持有 ${player.gems ? Object.values(player.gems).reduce((a, b) => a + b, 0) : 0} 顆寶石，需歸還 ${discardExcess} 顆`;
 
-  const gemsEl = document.getElementById('discard-gems');
-  gemsEl.innerHTML = '';
-  GEM_ALL.forEach(g => {
-    const cnt = player.gems[g] || 0;
-    if(cnt <= 0) return;
-    const btn = document.createElement('div');
-    btn.className = 'discard-gem-btn';
-    btn.dataset.gem = g;
-    btn.style.cssText = gemStyle(g) + `color:${gemTextColor(g)};border:3px solid transparent;`;
-    const badge = document.createElement('div');
-    badge.className = 'gem-count-badge';
-    badge.id = `discard-badge-${g}`;
-    badge.textContent = cnt;
-    btn.appendChild(badge);
+      const gemsEl = document.getElementById('discard-gems');
+      gemsEl.innerHTML = '';
+      GEM_ALL.forEach(g => {
+        const cnt = player.gems[g] || 0;
+        if (cnt <= 0) return;
+        const btn = document.createElement('div');
+        btn.className = 'discard-gem-btn';
+        btn.dataset.gem = g;
+        btn.style.cssText = gemStyle(g) + `color:${gemTextColor(g)};border:3px solid transparent;`;
+        const badge = document.createElement('div');
+        badge.className = 'gem-count-badge';
+        badge.id = `discard-badge-${g}`;
+        badge.textContent = cnt;
+        btn.appendChild(badge);
 
-    // 顯示「已選幾顆歸還」
-    const selBadge = document.createElement('div');
-    selBadge.style.cssText = `
+        // 顯示「已選幾顆歸還」
+        const selBadge = document.createElement('div');
+        selBadge.style.cssText = `
       position:absolute;top:-6px;left:-6px;
       background:var(--red-err);color:#fff;
       border-radius:50%;width:18px;height:18px;
       font-size:0.65rem;font-weight:900;
       display:none;align-items:center;justify-content:center;
     `;
-    selBadge.id = `discard-selbadge-${g}`;
-    btn.appendChild(selBadge);
+        selBadge.id = `discard-selbadge-${g}`;
+        btn.appendChild(selBadge);
 
-    btn.addEventListener('click', () => toggleDiscardGem(g, cnt));
-    gemsEl.appendChild(btn);
-  });
+        btn.addEventListener('click', () => toggleDiscardGem(g, cnt));
+        gemsEl.appendChild(btn);
+      });
 
-  document.getElementById('discard-panel').style.display = 'block';
-}
-
-function toggleDiscardGem(gem, maxCnt){
-  const cur = discardState[gem] || 0;
-  const totalDiscard = Object.values(discardState).reduce((a,b)=>a+b, 0);
-
-  if(cur > 0){
-    // 取消選取
-    discardState[gem] = cur - 1;
-  } else {
-    // 選取
-    if(totalDiscard >= discardExcess){
-      showMessage(`只需歸還 ${discardExcess} 顆`, 'info'); return;
+      document.getElementById('discard-panel').style.display = 'block';
     }
-    discardState[gem] = 1;
-  }
-  if(discardState[gem] <= 0) delete discardState[gem];
 
-  // 更新 UI
-  GEM_ALL.forEach(g => {
-    const selBadge = document.getElementById(`discard-selbadge-${g}`);
-    if(!selBadge) return;
-    const sel = discardState[g] || 0;
-    selBadge.textContent = `-${sel}`;
-    selBadge.style.display = sel > 0 ? 'flex' : 'none';
-  });
-}
+    function toggleDiscardGem(gem, maxCnt) {
+      const cur = discardState[gem] || 0;
+      const totalDiscard = Object.values(discardState).reduce((a, b) => a + b, 0);
 
-async function confirmDiscard(){
-  const totalDiscard = Object.values(discardState).reduce((a,b)=>a+b, 0);
-  if(totalDiscard !== discardExcess){
-    showMessage(`需歸還 ${discardExcess} 顆，目前選了 ${totalDiscard} 顆`, 'error');
-    return;
-  }
-  try {
-    const res = await fetch(`${API}/discard`, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ game_id: gameId, player_id: discardPlayerId, gems: discardState })
-    });
-    const data = await res.json();
-    if(!res.ok){ showMessage(data.detail || '歸還失敗', 'error'); return; }
-    state = data.state;
-    document.getElementById('discard-panel').style.display = 'none';
-    discardState = {};
-    renderAll();
-  } catch(e){
-    showMessage('連線錯誤', 'error');
-  }
-}
+      if (cur > 0) {
+        // 取消選取
+        discardState[gem] = cur - 1;
+      } else {
+        // 選取
+        if (totalDiscard >= discardExcess) {
+          showMessage(`只需歸還 ${discardExcess} 顆`, 'info'); return;
+        }
+        discardState[gem] = 1;
+      }
+      if (discardState[gem] <= 0) delete discardState[gem];
 
-// =============================================
-// 勝利畫面
-// =============================================
-function showWinScreen(st){
-  const winner = st.players[st.winner_id];
-  document.getElementById('win-title').textContent = `${winner.name} 獲勝！`;
+      // 更新 UI
+      GEM_ALL.forEach(g => {
+        const selBadge = document.getElementById(`discard-selbadge-${g}`);
+        if (!selBadge) return;
+        const sel = discardState[g] || 0;
+        selBadge.textContent = `-${sel}`;
+        selBadge.style.display = sel > 0 ? 'flex' : 'none';
+      });
+    }
 
-  const scoresEl = document.getElementById('win-scores');
-  scoresEl.innerHTML = '';
-  st.players.forEach(p => {
-    const item = document.createElement('div');
-    item.className = 'win-score-item' + (p.player_id === st.winner_id ? ' winner-item' : '');
-    item.innerHTML = `<div class="name">${p.name}</div><div class="score">${p.score}</div>`;
-    scoresEl.appendChild(item);
-  });
+    async function confirmDiscard() {
+      const totalDiscard = Object.values(discardState).reduce((a, b) => a + b, 0);
+      if (totalDiscard !== discardExcess) {
+        showMessage(`需歸還 ${discardExcess} 顆，目前選了 ${totalDiscard} 顆`, 'error');
+        return;
+      }
+      try {
+        const res = await fetch(`${API}/discard`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ game_id: gameId, player_id: discardPlayerId, gems: discardState })
+        });
+        const data = await res.json();
+        if (!res.ok) { showMessage(data.detail || '歸還失敗', 'error'); return; }
+        state = data.state;
+        document.getElementById('discard-panel').style.display = 'none';
+        discardState = {};
+        renderAll();
+      } catch (e) {
+        showMessage('連線錯誤', 'error');
+      }
+    }
 
-  spawnConfetti();
-  const ws2 = document.getElementById('win-screen');
-  ws2.style.display = 'flex';
-  ws2.style.flexDirection = 'column';
-  ws2.style.alignItems = 'center';
-  ws2.style.justifyContent = 'center';
-}
+    // =============================================
+    // 勝利畫面
+    // =============================================
+    function showWinScreen(st) {
+      const winner = st.players[st.winner_id];
+      document.getElementById('win-title').textContent = `${winner.name} 獲勝！`;
 
-function spawnConfetti(){
-  const container = document.getElementById('confetti-bg');
-  container.innerHTML = '';
-  const colors = ['#c9a84c','#f0c040','#fff','#1a6bbf','#2d8a4e','#c0392b'];
-  for(let i = 0; i < 80; i++){
-    const p = document.createElement('div');
-    p.className = 'confetti-particle';
-    const color = colors[Math.floor(Math.random() * colors.length)];
-    const left  = Math.random() * 100;
-    const delay = Math.random() * 3;
-    const dur   = 3 + Math.random() * 2;
-    const size  = 6 + Math.random() * 10;
-    p.style.cssText = `
+      const scoresEl = document.getElementById('win-scores');
+      scoresEl.innerHTML = '';
+      st.players.forEach(p => {
+        const item = document.createElement('div');
+        item.className = 'win-score-item' + (p.player_id === st.winner_id ? ' winner-item' : '');
+        item.innerHTML = `<div class="name">${p.name}</div><div class="score">${p.score}</div>`;
+        scoresEl.appendChild(item);
+      });
+
+      spawnConfetti();
+      const ws2 = document.getElementById('win-screen');
+      ws2.style.display = 'flex';
+      ws2.style.flexDirection = 'column';
+      ws2.style.alignItems = 'center';
+      ws2.style.justifyContent = 'center';
+    }
+
+    function spawnConfetti() {
+      const container = document.getElementById('confetti-bg');
+      container.innerHTML = '';
+      const colors = ['#c9a84c', '#f0c040', '#fff', '#1a6bbf', '#2d8a4e', '#c0392b'];
+      for (let i = 0; i < 80; i++) {
+        const p = document.createElement('div');
+        p.className = 'confetti-particle';
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const left = Math.random() * 100;
+        const delay = Math.random() * 3;
+        const dur = 3 + Math.random() * 2;
+        const size = 6 + Math.random() * 10;
+        p.style.cssText = `
       left:${left}%;background:${color};
       width:${size}px;height:${size}px;
       animation-duration:${dur}s;
       animation-delay:${delay}s;
     `;
-    container.appendChild(p);
-  }
-}
-
-// =============================================
-// 歷史記錄
-// =============================================
-async function showHistory(){
-  try {
-    const res = await fetch(`${API}/history`);
-    const data = await res.json();
-    const tbody = document.getElementById('history-tbody');
-    tbody.innerHTML = '';
-    if(data.length === 0){
-      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--text-dim);padding:1rem;">尚無對局記錄</td></tr>`;
+        container.appendChild(p);
+      }
     }
-    data.forEach(row => {
-      const tr = document.createElement('tr');
-      const modeStr = row.mode === 'pve' ? '人 vs AI' : '人 vs 人';
-      const diffStr = row.difficulty ? DIFF_NAMES[row.difficulty] || row.difficulty : '-';
-      const winnerStr = row.winner_id === 0 ? '玩家一' : (row.mode==='pvp' ? '玩家二' : 'AI');
-      const scoreStr  = `${row.score_p0 ?? '-'} : ${row.score_p1 ?? '-'}`;
-      const timeStr   = row.started_at ? row.started_at.substring(0,16).replace('T',' ') : '-';
-      tr.innerHTML = `
+
+    // =============================================
+    // 歷史記錄
+    // =============================================
+    async function showHistory() {
+      try {
+        const res = await fetch(`${API}/history`);
+        const data = await res.json();
+        const tbody = document.getElementById('history-tbody');
+        tbody.innerHTML = '';
+        if (data.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--text-dim);padding:1rem;">尚無對局記錄</td></tr>`;
+        }
+        data.forEach(row => {
+          const tr = document.createElement('tr');
+          const modeStr = row.mode === 'pve' ? '人 vs AI' : '人 vs 人';
+          const diffStr = row.difficulty ? DIFF_NAMES[row.difficulty] || row.difficulty : '-';
+          const winnerStr = row.winner_id === 0 ? '玩家一' : (row.mode === 'pvp' ? '玩家二' : 'AI');
+          const scoreStr = `${row.score_p0 ?? '-'} : ${row.score_p1 ?? '-'}`;
+          const timeStr = row.started_at ? row.started_at.substring(0, 16).replace('T', ' ') : '-';
+          tr.innerHTML = `
         <td>${modeStr}</td>
         <td>${diffStr}</td>
         <td style="color:var(--gold-bright)">${winnerStr}</td>
@@ -2578,101 +3013,102 @@ async function showHistory(){
         <td>${row.turns ?? '-'}</td>
         <td style="color:var(--text-dim);font-size:0.8rem;">${timeStr}</td>
       `;
-      tbody.appendChild(tr);
+          tbody.appendChild(tr);
+        });
+        const panel = document.getElementById('history-panel');
+        panel.style.display = 'flex';
+      } catch (e) {
+        showMessage('無法載入歷史記錄', 'error');
+      }
+    }
+
+    // =============================================
+    // 訊息提示
+    // =============================================
+    function showMessage(text, type = 'info', duration = 3000) {
+      const box = document.getElementById('message-box');
+      const item = document.createElement('div');
+      item.className = `msg-item ${type}`;
+      item.textContent = text;
+      box.appendChild(item);
+      setTimeout(() => {
+        item.style.opacity = '0';
+        item.style.transition = 'opacity 0.3s';
+        setTimeout(() => item.remove(), 300);
+      }, duration);
+    }
+
+    // =============================================
+    // 重置 UI 狀態
+    // =============================================
+    function resetUIState() {
+      selectedGems = {};
+      pendingAction = null;
+      discardState = {};
+      discardPlayerId = null;
+      _pendingBuyCardId = null;
+      document.getElementById('action-bar').classList.add('hidden');
+      document.getElementById('win-screen').style.display = 'none';
+      document.getElementById('ai-thinking').style.display = 'none';
+      document.getElementById('discard-panel').style.display = 'none';
+      document.getElementById('buy-confirm-panel').style.display = 'none';
+      document.getElementById('message-box').innerHTML = '';
+    }
+
+    // =============================================
+    // 事件綁定
+    // =============================================
+    document.getElementById('btn-start').addEventListener('click', startGame);
+
+    document.getElementById('btn-history').addEventListener('click', showHistory);
+
+    document.getElementById('btn-new-game-top').addEventListener('click', () => {
+      if (ws) { ws.close(); ws = null; }
+      document.getElementById('game-screen').style.display = 'none';
+      document.getElementById('start-screen').style.display = 'flex';
+      state = null; gameId = null;
     });
-    const panel = document.getElementById('history-panel');
-    panel.style.display = 'flex';
-  } catch(e){
-    showMessage('無法載入歷史記錄', 'error');
-  }
-}
 
-// =============================================
-// 訊息提示
-// =============================================
-function showMessage(text, type='info', duration=3000){
-  const box = document.getElementById('message-box');
-  const item = document.createElement('div');
-  item.className = `msg-item ${type}`;
-  item.textContent = text;
-  box.appendChild(item);
-  setTimeout(() => {
-    item.style.opacity = '0';
-    item.style.transition = 'opacity 0.3s';
-    setTimeout(() => item.remove(), 300);
-  }, duration);
-}
+    document.getElementById('btn-confirm-action').addEventListener('click', confirmAction);
+    document.getElementById('btn-cancel-action').addEventListener('click', cancelAction);
+    document.getElementById('btn-confirm-buy').addEventListener('click', () => {
+      if (_pendingBuyCardId === null) return;
+      document.getElementById('buy-confirm-panel').style.display = 'none';
+      doAction({ type: 'buy', card_id: _pendingBuyCardId });
+      _pendingBuyCardId = null;
+    });
+    document.getElementById('btn-cancel-buy').addEventListener('click', () => {
+      document.getElementById('buy-confirm-panel').style.display = 'none';
+      _pendingBuyCardId = null;
+    });
+    document.getElementById('btn-confirm-discard').addEventListener('click', confirmDiscard);
 
-// =============================================
-// 重置 UI 狀態
-// =============================================
-function resetUIState(){
-  selectedGems = {};
-  pendingAction = null;
-  discardState  = {};
-  discardPlayerId = null;
-  _pendingBuyCardId = null;
-  document.getElementById('action-bar').classList.add('hidden');
-  document.getElementById('win-screen').style.display = 'none';
-  document.getElementById('ai-thinking').style.display = 'none';
-  document.getElementById('discard-panel').style.display = 'none';
-  document.getElementById('buy-confirm-panel').style.display = 'none';
-  document.getElementById('message-box').innerHTML = '';
-}
+    document.getElementById('btn-play-again').addEventListener('click', () => {
+      document.getElementById('win-screen').style.display = 'none';
+      document.getElementById('game-screen').style.display = 'none';
+      document.getElementById('start-screen').style.display = 'flex';
+      if (ws) { ws.close(); ws = null; }
+      state = null; gameId = null;
+    });
 
-// =============================================
-// 事件綁定
-// =============================================
-document.getElementById('btn-start').addEventListener('click', startGame);
+    document.getElementById('btn-close-history').addEventListener('click', () => {
+      document.getElementById('history-panel').style.display = 'none';
+    });
 
-document.getElementById('btn-history').addEventListener('click', showHistory);
+    // 遊戲模式切換：隱藏/顯示難度選項
+    document.querySelectorAll('input[name="mode"]').forEach(r => {
+      r.addEventListener('change', () => {
+        const diffGroup = document.getElementById('difficulty-group');
+        diffGroup.style.display = r.value === 'pvp' ? 'none' : '';
+      });
+    });
 
-document.getElementById('btn-new-game-top').addEventListener('click', () => {
-  if(ws){ ws.close(); ws = null; }
-  document.getElementById('game-screen').style.display = 'none';
-  document.getElementById('start-screen').style.display = 'flex';
-  state = null; gameId = null;
-});
-
-document.getElementById('btn-confirm-action').addEventListener('click', confirmAction);
-document.getElementById('btn-cancel-action').addEventListener('click', cancelAction);
-document.getElementById('btn-confirm-buy').addEventListener('click', () => {
-  if(_pendingBuyCardId === null) return;
-  document.getElementById('buy-confirm-panel').style.display = 'none';
-  doAction({ type:'buy', card_id: _pendingBuyCardId });
-  _pendingBuyCardId = null;
-});
-document.getElementById('btn-cancel-buy').addEventListener('click', () => {
-  document.getElementById('buy-confirm-panel').style.display = 'none';
-  _pendingBuyCardId = null;
-});
-document.getElementById('btn-confirm-discard').addEventListener('click', confirmDiscard);
-
-document.getElementById('btn-play-again').addEventListener('click', () => {
-  document.getElementById('win-screen').style.display = 'none';
-  document.getElementById('game-screen').style.display = 'none';
-  document.getElementById('start-screen').style.display = 'flex';
-  if(ws){ ws.close(); ws = null; }
-  state = null; gameId = null;
-});
-
-document.getElementById('btn-close-history').addEventListener('click', () => {
-  document.getElementById('history-panel').style.display = 'none';
-});
-
-// 遊戲模式切換：隱藏/顯示難度選項
-document.querySelectorAll('input[name="mode"]').forEach(r => {
-  r.addEventListener('change', () => {
-    const diffGroup = document.getElementById('difficulty-group');
-    diffGroup.style.display = r.value === 'pvp' ? 'none' : '';
-  });
-});
-
-// 鍵盤：Enter 確認，Escape 取消
-document.addEventListener('keydown', e => {
-  if(e.key === 'Enter') confirmAction();
-  if(e.key === 'Escape') cancelAction();
-});
-</script>
+    // 鍵盤：Enter 確認，Escape 取消
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') confirmAction();
+      if (e.key === 'Escape') cancelAction();
+    });
+  </script>
 </body>
+
 </html>
